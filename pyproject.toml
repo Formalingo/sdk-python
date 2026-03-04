@@ -22,7 +22,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://formalingo.com/docs/sdks/python"
-Repository = "https://github.com/formalingo/sdk-python"
+Repository = "https://github.com/Formalingo/sdk-python"
 Documentation = "https://formalingo.com/docs/sdks/python"
 
 [build-system]

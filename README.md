@@ -5,7 +5,13 @@ Official Python SDK for the [Formalingo API](https://formalingo.com/docs).
 ## Installation
 
 ```bash
-pip install formalingo-sdk
+pip install git+https://github.com/Formalingo/sdk-python.git
+```
+
+Or with uv:
+
+```bash
+uv pip install git+https://github.com/Formalingo/sdk-python.git
 ```
 
 ## Quick Start

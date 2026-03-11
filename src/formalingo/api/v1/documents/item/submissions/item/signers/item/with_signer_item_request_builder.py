@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .responses.responses_request_builder import ResponsesRequestBuilder
     from .with_signer_delete_response import WithSignerDeleteResponse
     from .with_signer_put_request_body import WithSignerPutRequestBody
     from .with_signer_put_response import WithSignerPutResponse
@@ -99,6 +100,15 @@ class WithSignerItemRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return WithSignerItemRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def responses(self) -> ResponsesRequestBuilder:
+        """
+        The responses property
+        """
+        from .responses.responses_request_builder import ResponsesRequestBuilder
+
+        return ResponsesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class WithSignerItemRequestBuilderDeleteRequestConfiguration(RequestConfiguration[QueryParameters]):

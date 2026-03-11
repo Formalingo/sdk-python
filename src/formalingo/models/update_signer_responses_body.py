@@ -5,41 +5,38 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .signer_input import SignerInput
+    from .update_signer_responses_body_responses import UpdateSignerResponsesBody_responses
 
 @dataclass
-class CreateSubmissionBody(AdditionalDataHolder, Parsable):
+class UpdateSignerResponsesBody(AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
-    # One entry per signer role. Must provide all required roles.
-    signers: Optional[list[SignerInput]] = None
-    # If true, suppresses signer_invite notifications for all signers in this submission.
-    suppress_notifications: Optional[bool] = None
+    # Map of field ID → new value. Performs upsert on DocumentResponse records.
+    responses: Optional[UpdateSignerResponsesBody_responses] = None
     
     @staticmethod
-    def create_from_discriminator_value(parse_node: ParseNode) -> CreateSubmissionBody:
+    def create_from_discriminator_value(parse_node: ParseNode) -> UpdateSignerResponsesBody:
         """
         Creates a new instance of the appropriate class based on discriminator value
         param parse_node: The parse node to use to read the discriminator value and create the object
-        Returns: CreateSubmissionBody
+        Returns: UpdateSignerResponsesBody
         """
         if parse_node is None:
             raise TypeError("parse_node cannot be null.")
-        return CreateSubmissionBody()
+        return UpdateSignerResponsesBody()
     
     def get_field_deserializers(self,) -> dict[str, Callable[[ParseNode], None]]:
         """
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .signer_input import SignerInput
+        from .update_signer_responses_body_responses import UpdateSignerResponsesBody_responses
 
-        from .signer_input import SignerInput
+        from .update_signer_responses_body_responses import UpdateSignerResponsesBody_responses
 
         fields: dict[str, Callable[[Any], None]] = {
-            "signers": lambda n : setattr(self, 'signers', n.get_collection_of_object_values(SignerInput)),
-            "suppress_notifications": lambda n : setattr(self, 'suppress_notifications', n.get_bool_value()),
+            "responses": lambda n : setattr(self, 'responses', n.get_object_value(UpdateSignerResponsesBody_responses)),
         }
         return fields
     
@@ -51,8 +48,7 @@ class CreateSubmissionBody(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_collection_of_object_values("signers", self.signers)
-        writer.write_bool_value("suppress_notifications", self.suppress_notifications)
+        writer.write_object_value("responses", self.responses)
         writer.write_additional_data_value(self.additional_data)
     
 

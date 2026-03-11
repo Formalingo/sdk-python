@@ -14,79 +14,65 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .pdf.pdf_request_builder import PdfRequestBuilder
-    from .signers.signers_request_builder import SignersRequestBuilder
-    from .with_s_delete_response import WithSDeleteResponse
+    from .pdf404_error import Pdf404Error
+    from .pdf_get_response import PdfGetResponse
 
-class WithSItemRequestBuilder(BaseRequestBuilder):
+class PdfRequestBuilder(BaseRequestBuilder):
     """
-    Builds and executes requests for operations under /api/v1/documents/{id}/submissions/{sid}
+    Builds and executes requests for operations under /api/v1/documents/{id}/submissions/{sid}/pdf
     """
     def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
         """
-        Instantiates a new WithSItemRequestBuilder and sets the default values.
+        Instantiates a new PdfRequestBuilder and sets the default values.
         param path_parameters: The raw url or the url-template parameters for the request.
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/api/v1/documents/{id}/submissions/{sid}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/api/v1/documents/{id}/submissions/{sid}/pdf", path_parameters)
     
-    async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[WithSDeleteResponse]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[PdfGetResponse]:
         """
-        Delete a submission
+        Returns a short-lived (5-minute) presigned download URL for the completed signed PDF. Returns 404 if the submission is not yet completed or the PDF is still generating.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[WithSDeleteResponse]
+        Returns: Optional[PdfGetResponse]
         """
-        request_info = self.to_delete_request_information(
+        request_info = self.to_get_request_information(
             request_configuration
         )
+        from .pdf404_error import Pdf404Error
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "404": Pdf404Error,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .with_s_delete_response import WithSDeleteResponse
+        from .pdf_get_response import PdfGetResponse
 
-        return await self.request_adapter.send_async(request_info, WithSDeleteResponse, None)
+        return await self.request_adapter.send_async(request_info, PdfGetResponse, error_mapping)
     
-    def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Delete a submission
+        Returns a short-lived (5-minute) presigned download URL for the completed signed PDF. Returns 404 if the submission is not yet completed or the PDF is still generating.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
-        request_info = RequestInformation(Method.DELETE, self.url_template, self.path_parameters)
+        request_info = RequestInformation(Method.GET, self.url_template, self.path_parameters)
         request_info.configure(request_configuration)
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def with_url(self,raw_url: str) -> WithSItemRequestBuilder:
+    def with_url(self,raw_url: str) -> PdfRequestBuilder:
         """
         Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         param raw_url: The raw URL to use for the request builder.
-        Returns: WithSItemRequestBuilder
+        Returns: PdfRequestBuilder
         """
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
-        return WithSItemRequestBuilder(self.request_adapter, raw_url)
-    
-    @property
-    def pdf(self) -> PdfRequestBuilder:
-        """
-        The pdf property
-        """
-        from .pdf.pdf_request_builder import PdfRequestBuilder
-
-        return PdfRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def signers(self) -> SignersRequestBuilder:
-        """
-        The signers property
-        """
-        from .signers.signers_request_builder import SignersRequestBuilder
-
-        return SignersRequestBuilder(self.request_adapter, self.path_parameters)
+        return PdfRequestBuilder(self.request_adapter, raw_url)
     
     @dataclass
-    class WithSItemRequestBuilderDeleteRequestConfiguration(RequestConfiguration[QueryParameters]):
+    class PdfRequestBuilderGetRequestConfiguration(RequestConfiguration[QueryParameters]):
         """
         Configuration for the request such as headers, query parameters, and middleware options.
         """

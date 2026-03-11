@@ -3,6 +3,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, ParseNode, SerializationWriter
 from typing import Any, Optional, TYPE_CHECKING, Union
+from uuid import UUID
 
 if TYPE_CHECKING:
     from .signer_input_prefill import SignerInput_prefill
@@ -24,6 +25,8 @@ class SignerInput(AdditionalDataHolder, Parsable):
     prefill: Optional[SignerInput_prefill] = None
     # If true, prefilled fields are marked read-only on the document
     prefill_readonly: Optional[bool] = None
+    # List of field IDs to mark as read-only for this signer, regardless of the document-level isReadOnly setting. Useful for locking specific fields per-signer at submission time.
+    readonly_field_ids: Optional[list[UUID]] = None
     # Must match a signer role defined in the document editor
     role: Optional[str] = None
     
@@ -54,6 +57,7 @@ class SignerInput(AdditionalDataHolder, Parsable):
             "phone": lambda n : setattr(self, 'phone', n.get_str_value()),
             "prefill": lambda n : setattr(self, 'prefill', n.get_object_value(SignerInput_prefill)),
             "prefillReadonly": lambda n : setattr(self, 'prefill_readonly', n.get_bool_value()),
+            "readonlyFieldIds": lambda n : setattr(self, 'readonly_field_ids', n.get_collection_of_primitive_values(UUID)),
             "role": lambda n : setattr(self, 'role', n.get_str_value()),
         }
         return fields
@@ -72,6 +76,7 @@ class SignerInput(AdditionalDataHolder, Parsable):
         writer.write_str_value("phone", self.phone)
         writer.write_object_value("prefill", self.prefill)
         writer.write_bool_value("prefillReadonly", self.prefill_readonly)
+        writer.write_collection_of_primitive_values("readonlyFieldIds", self.readonly_field_ids)
         writer.write_str_value("role", self.role)
         writer.write_additional_data_value(self.additional_data)
     

@@ -38,7 +38,7 @@ class FormalingoClient(BaseRequestBuilder):
         register_default_deserializer(TextParseNodeFactory)
         register_default_deserializer(FormParseNodeFactory)
         if not self.request_adapter.base_url:
-            self.request_adapter.base_url = "http://localhost:3000"
+            self.request_adapter.base_url = "http://localhost:3001"
         self.path_parameters["base_url"] = self.request_adapter.base_url
     
     @property

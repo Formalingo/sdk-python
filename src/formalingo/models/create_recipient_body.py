@@ -25,6 +25,8 @@ class CreateRecipientBody(AdditionalDataHolder, Parsable):
     phone: Optional[str] = None
     # Map of question ID → pre-filled value. The value is saved as a Response.
     prefill: Optional[CreateRecipientBody_prefill] = None
+    # If true, suppresses recipient_invite notification for this recipient.
+    suppress_notifications: Optional[bool] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> CreateRecipientBody:
@@ -53,6 +55,7 @@ class CreateRecipientBody(AdditionalDataHolder, Parsable):
             "password": lambda n : setattr(self, 'password', n.get_str_value()),
             "phone": lambda n : setattr(self, 'phone', n.get_str_value()),
             "prefill": lambda n : setattr(self, 'prefill', n.get_object_value(CreateRecipientBody_prefill)),
+            "suppress_notifications": lambda n : setattr(self, 'suppress_notifications', n.get_bool_value()),
         }
         return fields
     
@@ -70,6 +73,7 @@ class CreateRecipientBody(AdditionalDataHolder, Parsable):
         writer.write_str_value("password", self.password)
         writer.write_str_value("phone", self.phone)
         writer.write_object_value("prefill", self.prefill)
+        writer.write_bool_value("suppress_notifications", self.suppress_notifications)
         writer.write_additional_data_value(self.additional_data)
     
 

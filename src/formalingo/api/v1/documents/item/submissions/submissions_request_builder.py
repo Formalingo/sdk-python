@@ -64,7 +64,7 @@ class SubmissionsRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: CreateSubmissionBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SubmissionsPostResponse]:
         """
-        Creates a signing submission. Each signer entry maps to a signer role. Use the `prefill` field to pre-fill specific document fields for a signer.
+        Creates a signing submission. Each signer entry maps to a signer role. Use the `prefill` field to pre-fill specific document fields for a signer. Prefill keys can be field UUIDs or field labels (resolved per signer role). The `readonlyFieldIds` field also accepts labels.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[SubmissionsPostResponse]
@@ -93,7 +93,7 @@ class SubmissionsRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: CreateSubmissionBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a signing submission. Each signer entry maps to a signer role. Use the `prefill` field to pre-fill specific document fields for a signer.
+        Creates a signing submission. Each signer entry maps to a signer role. Use the `prefill` field to pre-fill specific document fields for a signer. Prefill keys can be field UUIDs or field labels (resolved per signer role). The `readonlyFieldIds` field also accepts labels.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

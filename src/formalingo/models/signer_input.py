@@ -3,7 +3,6 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, ParseNode, SerializationWriter
 from typing import Any, Optional, TYPE_CHECKING, Union
-from uuid import UUID
 
 if TYPE_CHECKING:
     from .signer_input_prefill import SignerInput_prefill
@@ -21,12 +20,12 @@ class SignerInput(AdditionalDataHolder, Parsable):
     password: Optional[str] = None
     # The phone property
     phone: Optional[str] = None
-    # Map of field ID → pre-filled value. Creates DocumentResponse records immediately.
+    # Map of field identifier → pre-filled value. Keys can be field UUIDs or field labels. Label-based keys are resolved against fields assigned to this signer's role. If a label matches multiple fields for the same role, the request is rejected with disambiguation details. Creates DocumentResponse records immediately.
     prefill: Optional[SignerInput_prefill] = None
     # If true, prefilled fields are marked read-only on the document
     prefill_readonly: Optional[bool] = None
-    # List of field IDs to mark as read-only for this signer, regardless of the document-level isReadOnly setting. Useful for locking specific fields per-signer at submission time.
-    readonly_field_ids: Optional[list[UUID]] = None
+    # List of field IDs or field labels to mark as read-only for this signer, regardless of the document-level isReadOnly setting. Labels are resolved against fields assigned to this signer's role. Useful for locking specific fields per-signer at submission time.
+    readonly_field_ids: Optional[list[str]] = None
     # Must match a signer role defined in the document editor
     role: Optional[str] = None
     
@@ -57,7 +56,7 @@ class SignerInput(AdditionalDataHolder, Parsable):
             "phone": lambda n : setattr(self, 'phone', n.get_str_value()),
             "prefill": lambda n : setattr(self, 'prefill', n.get_object_value(SignerInput_prefill)),
             "prefillReadonly": lambda n : setattr(self, 'prefill_readonly', n.get_bool_value()),
-            "readonlyFieldIds": lambda n : setattr(self, 'readonly_field_ids', n.get_collection_of_primitive_values(UUID)),
+            "readonlyFieldIds": lambda n : setattr(self, 'readonly_field_ids', n.get_collection_of_primitive_values(str)),
             "role": lambda n : setattr(self, 'role', n.get_str_value()),
         }
         return fields

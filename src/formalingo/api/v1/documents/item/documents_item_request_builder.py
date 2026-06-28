@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     from .documents_put_request_body import DocumentsPutRequestBody
     from .documents_put_response import DocumentsPutResponse
     from .fields.fields_request_builder import FieldsRequestBuilder
+    from .parse_jobs.parse_jobs_request_builder import ParseJobsRequestBuilder
+    from .publish.publish_request_builder import PublishRequestBuilder
+    from .revisions.revisions_request_builder import RevisionsRequestBuilder
     from .signer_roles.signer_roles_request_builder import SignerRolesRequestBuilder
     from .submissions.submissions_request_builder import SubmissionsRequestBuilder
 
@@ -139,6 +142,33 @@ class DocumentsItemRequestBuilder(BaseRequestBuilder):
         from .fields.fields_request_builder import FieldsRequestBuilder
 
         return FieldsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def parse_jobs(self) -> ParseJobsRequestBuilder:
+        """
+        The parseJobs property
+        """
+        from .parse_jobs.parse_jobs_request_builder import ParseJobsRequestBuilder
+
+        return ParseJobsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def publish(self) -> PublishRequestBuilder:
+        """
+        The publish property
+        """
+        from .publish.publish_request_builder import PublishRequestBuilder
+
+        return PublishRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def revisions(self) -> RevisionsRequestBuilder:
+        """
+        The revisions property
+        """
+        from .revisions.revisions_request_builder import RevisionsRequestBuilder
+
+        return RevisionsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def signer_roles(self) -> SignerRolesRequestBuilder:

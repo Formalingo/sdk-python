@@ -16,6 +16,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.create_recipient_body import CreateRecipientBody
+    from .bulk.bulk_request_builder import BulkRequestBuilder
     from .item.with_r_item_request_builder import WithRItemRequestBuilder
     from .recipients_get_response import RecipientsGetResponse
     from .recipients_post_response import RecipientsPostResponse
@@ -115,6 +116,15 @@ class RecipientsRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return RecipientsRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def bulk(self) -> BulkRequestBuilder:
+        """
+        The bulk property
+        """
+        from .bulk.bulk_request_builder import BulkRequestBuilder
+
+        return BulkRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class RecipientsRequestBuilderGetRequestConfiguration(RequestConfiguration[QueryParameters]):

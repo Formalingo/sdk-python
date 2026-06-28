@@ -30,10 +30,14 @@ class Form(AdditionalDataHolder, Parsable):
     public_token: Optional[str] = None
     # The question_count property
     question_count: Optional[float] = None
+    # Total recipients (links/invites) for the form
+    sent_count: Optional[float] = None
     # The settings property
     settings: Optional[Form_settings] = None
     # The status property
     status: Optional[Form_status] = None
+    # Recipients who have completed the form
+    submission_count: Optional[float] = None
     # The title property
     title: Optional[str] = None
     # The updatedAt property
@@ -73,8 +77,10 @@ class Form(AdditionalDataHolder, Parsable):
             "id": lambda n : setattr(self, 'id', n.get_uuid_value()),
             "publicToken": lambda n : setattr(self, 'public_token', n.get_str_value()),
             "question_count": lambda n : setattr(self, 'question_count', n.get_float_value()),
+            "sent_count": lambda n : setattr(self, 'sent_count', n.get_float_value()),
             "settings": lambda n : setattr(self, 'settings', n.get_object_value(Form_settings)),
             "status": lambda n : setattr(self, 'status', n.get_enum_value(Form_status)),
+            "submission_count": lambda n : setattr(self, 'submission_count', n.get_float_value()),
             "title": lambda n : setattr(self, 'title', n.get_str_value()),
             "updatedAt": lambda n : setattr(self, 'updated_at', n.get_datetime_value()),
             "workspaceId": lambda n : setattr(self, 'workspace_id', n.get_uuid_value()),
@@ -96,8 +102,10 @@ class Form(AdditionalDataHolder, Parsable):
         writer.write_uuid_value("id", self.id)
         writer.write_str_value("publicToken", self.public_token)
         writer.write_float_value("question_count", self.question_count)
+        writer.write_float_value("sent_count", self.sent_count)
         writer.write_object_value("settings", self.settings)
         writer.write_enum_value("status", self.status)
+        writer.write_float_value("submission_count", self.submission_count)
         writer.write_str_value("title", self.title)
         writer.write_datetime_value("updatedAt", self.updated_at)
         writer.write_uuid_value("workspaceId", self.workspace_id)

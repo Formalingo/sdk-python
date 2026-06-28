@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .pdf403_error import Pdf403Error
     from .pdf404_error import Pdf404Error
     from .pdf_get_response import PdfGetResponse
 
@@ -39,9 +40,11 @@ class PdfRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
+        from .pdf403_error import Pdf403Error
         from .pdf404_error import Pdf404Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": Pdf403Error,
             "404": Pdf404Error,
         }
         if not self.request_adapter:

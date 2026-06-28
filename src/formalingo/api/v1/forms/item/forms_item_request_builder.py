@@ -21,8 +21,10 @@ if TYPE_CHECKING:
     from .forms_delete_response import FormsDeleteResponse
     from .forms_get_response import FormsGetResponse
     from .forms_put_response import FormsPutResponse
+    from .publish.publish_request_builder import PublishRequestBuilder
     from .questions.questions_request_builder import QuestionsRequestBuilder
     from .recipients.recipients_request_builder import RecipientsRequestBuilder
+    from .revisions.revisions_request_builder import RevisionsRequestBuilder
     from .sections.sections_request_builder import SectionsRequestBuilder
 
 class FormsItemRequestBuilder(BaseRequestBuilder):
@@ -153,6 +155,15 @@ class FormsItemRequestBuilder(BaseRequestBuilder):
         return FormsItemRequestBuilder(self.request_adapter, raw_url)
     
     @property
+    def publish(self) -> PublishRequestBuilder:
+        """
+        The publish property
+        """
+        from .publish.publish_request_builder import PublishRequestBuilder
+
+        return PublishRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
     def questions(self) -> QuestionsRequestBuilder:
         """
         The questions property
@@ -169,6 +180,15 @@ class FormsItemRequestBuilder(BaseRequestBuilder):
         from .recipients.recipients_request_builder import RecipientsRequestBuilder
 
         return RecipientsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def revisions(self) -> RevisionsRequestBuilder:
+        """
+        The revisions property
+        """
+        from .revisions.revisions_request_builder import RevisionsRequestBuilder
+
+        return RevisionsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def sections(self) -> SectionsRequestBuilder:

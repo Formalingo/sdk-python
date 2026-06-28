@@ -6,8 +6,12 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .analytics.analytics_request_builder import AnalyticsRequestBuilder
+    from .deliveries.deliveries_request_builder import DeliveriesRequestBuilder
     from .documents.documents_request_builder import DocumentsRequestBuilder
     from .forms.forms_request_builder import FormsRequestBuilder
+    from .integrations.integrations_request_builder import IntegrationsRequestBuilder
+    from .quota.quota_request_builder import QuotaRequestBuilder
 
 class V1RequestBuilder(BaseRequestBuilder):
     """
@@ -21,6 +25,24 @@ class V1RequestBuilder(BaseRequestBuilder):
         Returns: None
         """
         super().__init__(request_adapter, "{+baseurl}/api/v1", path_parameters)
+    
+    @property
+    def analytics(self) -> AnalyticsRequestBuilder:
+        """
+        The analytics property
+        """
+        from .analytics.analytics_request_builder import AnalyticsRequestBuilder
+
+        return AnalyticsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def deliveries(self) -> DeliveriesRequestBuilder:
+        """
+        The deliveries property
+        """
+        from .deliveries.deliveries_request_builder import DeliveriesRequestBuilder
+
+        return DeliveriesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def documents(self) -> DocumentsRequestBuilder:
@@ -39,5 +61,23 @@ class V1RequestBuilder(BaseRequestBuilder):
         from .forms.forms_request_builder import FormsRequestBuilder
 
         return FormsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def integrations(self) -> IntegrationsRequestBuilder:
+        """
+        The integrations property
+        """
+        from .integrations.integrations_request_builder import IntegrationsRequestBuilder
+
+        return IntegrationsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def quota(self) -> QuotaRequestBuilder:
+        """
+        The quota property
+        """
+        from .quota.quota_request_builder import QuotaRequestBuilder
+
+        return QuotaRequestBuilder(self.request_adapter, self.path_parameters)
     
 

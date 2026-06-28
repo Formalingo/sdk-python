@@ -20,6 +20,8 @@ if TYPE_CHECKING:
     from .forms401_error import Forms401Error
     from .forms_get_response import FormsGetResponse
     from .forms_post_response import FormsPostResponse
+    from .get_order_query_parameter_type import GetOrderQueryParameterType
+    from .get_sort_query_parameter_type import GetSortQueryParameterType
     from .get_status_query_parameter_type import GetStatusQueryParameterType
     from .item.forms_item_request_builder import FormsItemRequestBuilder
 
@@ -34,7 +36,7 @@ class FormsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/api/v1/forms{?limit*,page*,status*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/api/v1/forms{?limit*,maxSent*,maxSubmissions*,minSent*,minSubmissions*,order*,page*,sort*,status*}", path_parameters)
     
     def by_id(self,id: UUID) -> FormsItemRequestBuilder:
         """
@@ -137,9 +139,53 @@ class FormsRequestBuilder(BaseRequestBuilder):
         """
         List forms
         """
+        def get_query_parameter(self,original_name: str) -> str:
+            """
+            Maps the query parameters names to their encoded names for the URI template parsing.
+            param original_name: The original query parameter name in the class.
+            Returns: str
+            """
+            if original_name is None:
+                raise TypeError("original_name cannot be null.")
+            if original_name == "max_sent":
+                return "maxSent"
+            if original_name == "max_submissions":
+                return "maxSubmissions"
+            if original_name == "min_sent":
+                return "minSent"
+            if original_name == "min_submissions":
+                return "minSubmissions"
+            if original_name == "limit":
+                return "limit"
+            if original_name == "order":
+                return "order"
+            if original_name == "page":
+                return "page"
+            if original_name == "sort":
+                return "sort"
+            if original_name == "status":
+                return "status"
+            return original_name
+        
         limit: Optional[int] = None
 
+        max_sent: Optional[int] = None
+
+        max_submissions: Optional[int] = None
+
+        # Only forms with at least this many recipients
+        min_sent: Optional[int] = None
+
+        # Only forms with at least this many completed submissions
+        min_submissions: Optional[int] = None
+
+        # Sort direction (default: desc)
+        order: Optional[GetOrderQueryParameterType] = None
+
         page: Optional[int] = None
+
+        # Sort key (default: updated)
+        sort: Optional[GetSortQueryParameterType] = None
 
         status: Optional[GetStatusQueryParameterType] = None
 

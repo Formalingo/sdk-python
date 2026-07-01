@@ -15,4 +15,5 @@ class DocumentField_type(str, Enum):
     Email = "email",
     Phone = "phone",
     Initials = "initials",
+    Calculation = "calculation",
 

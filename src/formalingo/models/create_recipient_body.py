@@ -23,7 +23,7 @@ class CreateRecipientBody(AdditionalDataHolder, Parsable):
     password: Optional[str] = None
     # The phone property
     phone: Optional[str] = None
-    # Map of question ID → pre-filled value. The value is saved as a Response.
+    # Map of question ID or exact question text → pre-filled value. The value is saved as a Response.
     prefill: Optional[CreateRecipientBody_prefill] = None
     # If true, suppresses recipient_invite notification for this recipient.
     suppress_notifications: Optional[bool] = None

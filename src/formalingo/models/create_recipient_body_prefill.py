@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class CreateRecipientBody_prefill(AdditionalDataHolder, Parsable):
     """
-    Map of question ID → pre-filled value. The value is saved as a Response.
+    Map of question ID or exact question text → pre-filled value. The value is saved as a Response.
     """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)

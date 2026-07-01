@@ -14,7 +14,7 @@ class CreateSubmissionBody(AdditionalDataHolder, Parsable):
 
     # One entry per signer role. Must provide all required roles.
     signers: Optional[list[SignerInput]] = None
-    # If true, suppresses signer_invite notifications for all signers in this submission.
+    # Suppresses signer_invite notifications for all signers in this submission. Defaults to true; set false to send notifications.
     suppress_notifications: Optional[bool] = None
     
     @staticmethod

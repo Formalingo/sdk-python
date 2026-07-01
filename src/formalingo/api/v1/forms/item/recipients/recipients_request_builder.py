@@ -65,7 +65,7 @@ class RecipientsRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: CreateRecipientBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[RecipientsPostResponse]:
         """
-        Creates a form recipient with an optional pre-fill map. The `prefill` field accepts `{ questionId: value }` pairs that are saved as Response records immediately.
+        Creates a form recipient with an optional pre-fill map. The `prefill` field accepts question IDs or exact question text as keys; resolved values are saved as Response records immediately.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[RecipientsPostResponse]
@@ -94,7 +94,7 @@ class RecipientsRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: CreateRecipientBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a form recipient with an optional pre-fill map. The `prefill` field accepts `{ questionId: value }` pairs that are saved as Response records immediately.
+        Creates a form recipient with an optional pre-fill map. The `prefill` field accepts question IDs or exact question text as keys; resolved values are saved as Response records immediately.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

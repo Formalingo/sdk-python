@@ -36,7 +36,7 @@ class DocumentField(AdditionalDataHolder, Parsable):
     is_required: Optional[bool] = None
     # The label property
     label: Optional[str] = None
-    # The options property
+    # Type-specific options. For calculation fields, use { formula: "{{Field A}} {{Field B}}", result_type: "text" | "number" }.
     options: Optional[DocumentField_options] = None
     # The order property
     order: Optional[float] = None

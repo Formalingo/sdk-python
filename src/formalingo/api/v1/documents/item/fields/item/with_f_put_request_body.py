@@ -30,7 +30,7 @@ class WithFPutRequestBody(AdditionalDataHolder, Parsable):
     is_required: Optional[bool] = None
     # The label property
     label: Optional[str] = None
-    # The options property
+    # Type-specific options. Calculation fields require formula and accept result_type ("text" or "number").
     options: Optional[WithFPutRequestBody_options] = None
     # The order property
     order: Optional[int] = None

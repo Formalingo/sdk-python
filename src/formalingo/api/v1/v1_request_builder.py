@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from .analytics.analytics_request_builder import AnalyticsRequestBuilder
     from .deliveries.deliveries_request_builder import DeliveriesRequestBuilder
     from .documents.documents_request_builder import DocumentsRequestBuilder
+    from .files.files_request_builder import FilesRequestBuilder
     from .forms.forms_request_builder import FormsRequestBuilder
     from .integrations.integrations_request_builder import IntegrationsRequestBuilder
     from .quota.quota_request_builder import QuotaRequestBuilder
@@ -52,6 +53,15 @@ class V1RequestBuilder(BaseRequestBuilder):
         from .documents.documents_request_builder import DocumentsRequestBuilder
 
         return DocumentsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def files(self) -> FilesRequestBuilder:
+        """
+        The files property
+        """
+        from .files.files_request_builder import FilesRequestBuilder
+
+        return FilesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def forms(self) -> FormsRequestBuilder:

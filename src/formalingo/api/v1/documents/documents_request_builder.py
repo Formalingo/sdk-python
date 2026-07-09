@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from .documents_get_response import DocumentsGetResponse
     from .documents_post_response import DocumentsPostResponse
     from .get_status_query_parameter_type import GetStatusQueryParameterType
+    from .import_.import_request_builder import ImportRequestBuilder
     from .item.documents_item_request_builder import DocumentsItemRequestBuilder
 
 class DocumentsRequestBuilder(BaseRequestBuilder):
@@ -116,6 +117,15 @@ class DocumentsRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return DocumentsRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def import_(self) -> ImportRequestBuilder:
+        """
+        The import property
+        """
+        from .import_.import_request_builder import ImportRequestBuilder
+
+        return ImportRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class DocumentsRequestBuilderGetQueryParameters():

@@ -7,6 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from uuid import UUID
 
 if TYPE_CHECKING:
+    from .document_submission_signed_pdf import DocumentSubmission_signedPdf
     from .document_submission_status import DocumentSubmission_status
     from .signer import Signer
 
@@ -17,7 +18,7 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
 
     # The completedAt property
     completed_at: Optional[datetime.datetime] = None
-    # The completedPdfUrl property
+    # Deprecated compatibility alias. For completed submissions this points to Formalingo's API-key-gated signed PDF descriptor endpoint, not raw storage. Prefer signedPdf.downloadUrl.
     completed_pdf_url: Optional[str] = None
     # The createdAt property
     created_at: Optional[datetime.datetime] = None
@@ -25,6 +26,8 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
     document_id: Optional[UUID] = None
     # The id property
     id: Optional[UUID] = None
+    # Stable API-key-gated file descriptor for the completed signed PDF.
+    signed_pdf: Optional[DocumentSubmission_signedPdf] = None
     # The signers property
     signers: Optional[list[Signer]] = None
     # The status property
@@ -46,9 +49,11 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .document_submission_signed_pdf import DocumentSubmission_signedPdf
         from .document_submission_status import DocumentSubmission_status
         from .signer import Signer
 
+        from .document_submission_signed_pdf import DocumentSubmission_signedPdf
         from .document_submission_status import DocumentSubmission_status
         from .signer import Signer
 
@@ -58,6 +63,7 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
             "createdAt": lambda n : setattr(self, 'created_at', n.get_datetime_value()),
             "documentId": lambda n : setattr(self, 'document_id', n.get_uuid_value()),
             "id": lambda n : setattr(self, 'id', n.get_uuid_value()),
+            "signedPdf": lambda n : setattr(self, 'signed_pdf', n.get_object_value(DocumentSubmission_signedPdf)),
             "signers": lambda n : setattr(self, 'signers', n.get_collection_of_object_values(Signer)),
             "status": lambda n : setattr(self, 'status', n.get_enum_value(DocumentSubmission_status)),
         }
@@ -76,6 +82,7 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
         writer.write_datetime_value("createdAt", self.created_at)
         writer.write_uuid_value("documentId", self.document_id)
         writer.write_uuid_value("id", self.id)
+        writer.write_object_value("signedPdf", self.signed_pdf)
         writer.write_collection_of_object_values("signers", self.signers)
         writer.write_enum_value("status", self.status)
         writer.write_additional_data_value(self.additional_data)

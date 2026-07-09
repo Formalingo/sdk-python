@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from .documents_get_response import DocumentsGetResponse
     from .documents_put_request_body import DocumentsPutRequestBody
     from .documents_put_response import DocumentsPutResponse
+    from .export.export_request_builder import ExportRequestBuilder
     from .fields.fields_request_builder import FieldsRequestBuilder
     from .parse_jobs.parse_jobs_request_builder import ParseJobsRequestBuilder
     from .publish.publish_request_builder import PublishRequestBuilder
@@ -133,6 +134,15 @@ class DocumentsItemRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return DocumentsItemRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def export(self) -> ExportRequestBuilder:
+        """
+        The export property
+        """
+        from .export.export_request_builder import ExportRequestBuilder
+
+        return ExportRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def fields(self) -> FieldsRequestBuilder:

@@ -16,7 +16,7 @@ class UpdateSignerBody(AdditionalDataHolder, Parsable):
     color: Optional[str] = None
     # The email property
     email: Optional[str] = None
-    # The expiresAt property
+    # ISO 8601 expiry; null clears it.
     expires_at: Optional[datetime.datetime] = None
     # The label property
     label: Optional[str] = None
@@ -26,7 +26,7 @@ class UpdateSignerBody(AdditionalDataHolder, Parsable):
     order: Optional[int] = None
     # Write-only password; null removes it and it is never returned.
     password: Optional[str] = None
-    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
+    # Accepted formatted phone input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
     # The role property
     role: Optional[str] = None

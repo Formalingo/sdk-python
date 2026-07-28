@@ -14,7 +14,7 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
     clear_phone: Optional[bool] = None
     # The email property
     email: Optional[str] = None
-    # The expires_at property
+    # ISO 8601 expiry; null clears it.
     expires_at: Optional[datetime.datetime] = None
     # The is_active property
     is_active: Optional[bool] = None
@@ -22,7 +22,7 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
     label: Optional[str] = None
     # Write-only; null removes the password.
     password: Optional[str] = None
-    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
+    # Accepted formatted phone input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
     
     @staticmethod

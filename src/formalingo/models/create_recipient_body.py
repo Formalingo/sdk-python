@@ -21,7 +21,7 @@ class CreateRecipientBody(AdditionalDataHolder, Parsable):
     label: Optional[str] = None
     # Optional password to protect the form link
     password: Optional[str] = None
-    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
+    # Accepted formatted phone input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
     # Map of question ID or exact question text → pre-filled value. The value is saved as a Response.
     prefill: Optional[CreateRecipientBody_prefill] = None

@@ -1,20 +1,22 @@
 import unittest
+import json
 
 from formalingo.models.update_recipient_body import UpdateRecipientBody
+from formalingo.models.update_signer_body import UpdateSignerBody
+from kiota_serialization_json.json_serialization_writer import JsonSerializationWriter
 
 
-class Writer:
-    def __init__(self): self.values = {}
-    def write_bool_value(self, key, value):
-        if value is not None: self.values[key] = value
-    def write_str_value(self, *_): pass
-    def write_datetime_value(self, *_): pass
-    def write_additional_data_value(self, *_): pass
+def serialized(model):
+    writer = JsonSerializationWriter()
+    model.serialize(writer)
+    return json.loads(writer.get_serialized_content())
 
 
 class PhoneClearSerializationTests(unittest.TestCase):
     def test_omitted_and_true_clear_phone_are_distinct(self):
-        omitted = Writer(); UpdateRecipientBody().serialize(omitted)
-        explicit = Writer(); UpdateRecipientBody(clear_phone=True).serialize(explicit)
-        self.assertNotIn('clearPhone', omitted.values)
-        self.assertEqual(True, explicit.values['clearPhone'])
+        self.assertNotIn('clearPhone', serialized(UpdateRecipientBody()))
+        self.assertTrue(serialized(UpdateRecipientBody(clear_phone=True))['clearPhone'])
+
+    def test_signer_omitted_and_true_clear_phone_are_distinct(self):
+        self.assertNotIn('clearPhone', serialized(UpdateSignerBody()))
+        self.assertTrue(serialized(UpdateSignerBody(clear_phone=True))['clearPhone'])

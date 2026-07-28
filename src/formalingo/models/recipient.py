@@ -36,7 +36,7 @@ class Recipient(AdditionalDataHolder, Parsable):
     last_activity_at: Optional[datetime.datetime] = None
     # The link property
     link: Optional[str] = None
-    # Responses are canonical E.164 phone values stored after successful creates and edits.
+    # Stored phone value. Legacy list/get records can retain their pre-normalization stored value until corrected.
     phone: Optional[str] = None
     # The response_count property
     response_count: Optional[float] = None

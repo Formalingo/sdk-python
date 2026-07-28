@@ -10,16 +10,26 @@ class UpdateSignerBody(AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
-    # The email property
+    # Set true to clear the stored phone number. Omit to leave it unchanged.
+    clear_phone: Optional[bool] = None
+    # The color property
+    color: Optional[str] = None
+    # Email address; null clears it.
     email: Optional[str] = None
-    # The expiresAt property
+    # ISO 8601 expiry; null clears it.
     expires_at: Optional[datetime.datetime] = None
     # The label property
     label: Optional[str] = None
-    # The name property
+    # Signer name; null clears it.
     name: Optional[str] = None
-    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
+    # The order property
+    order: Optional[int] = None
+    # Write-only password; null removes it and it is never returned.
+    password: Optional[str] = None
+    # Accepted formatted phone input; null clears it.
     phone: Optional[str] = None
+    # The role property
+    role: Optional[str] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> UpdateSignerBody:
@@ -38,11 +48,16 @@ class UpdateSignerBody(AdditionalDataHolder, Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "clearPhone": lambda n : setattr(self, 'clear_phone', n.get_bool_value()),
+            "color": lambda n : setattr(self, 'color', n.get_str_value()),
             "email": lambda n : setattr(self, 'email', n.get_str_value()),
             "expiresAt": lambda n : setattr(self, 'expires_at', n.get_datetime_value()),
             "label": lambda n : setattr(self, 'label', n.get_str_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
+            "order": lambda n : setattr(self, 'order', n.get_int_value()),
+            "password": lambda n : setattr(self, 'password', n.get_str_value()),
             "phone": lambda n : setattr(self, 'phone', n.get_str_value()),
+            "role": lambda n : setattr(self, 'role', n.get_str_value()),
         }
         return fields
     
@@ -54,11 +69,16 @@ class UpdateSignerBody(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_bool_value("clearPhone", self.clear_phone)
+        writer.write_str_value("color", self.color)
         writer.write_str_value("email", self.email)
         writer.write_datetime_value("expiresAt", self.expires_at)
         writer.write_str_value("label", self.label)
         writer.write_str_value("name", self.name)
+        writer.write_int_value("order", self.order)
+        writer.write_str_value("password", self.password)
         writer.write_str_value("phone", self.phone)
+        writer.write_str_value("role", self.role)
         writer.write_additional_data_value(self.additional_data)
     
 

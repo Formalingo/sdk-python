@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .........models.signer import Signer
+    from .........models.canonical_signer import CanonicalSigner
 
 @dataclass
 class WithSignerPutResponse(AdditionalDataHolder, Parsable):
@@ -13,7 +13,7 @@ class WithSignerPutResponse(AdditionalDataHolder, Parsable):
     additional_data: dict[str, Any] = field(default_factory=dict)
 
     # The data property
-    data: Optional[Signer] = None
+    data: Optional[CanonicalSigner] = None
     # The success property
     success: Optional[bool] = None
     
@@ -33,12 +33,12 @@ class WithSignerPutResponse(AdditionalDataHolder, Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .........models.signer import Signer
+        from .........models.canonical_signer import CanonicalSigner
 
-        from .........models.signer import Signer
+        from .........models.canonical_signer import CanonicalSigner
 
         fields: dict[str, Callable[[Any], None]] = {
-            "data": lambda n : setattr(self, 'data', n.get_object_value(Signer)),
+            "data": lambda n : setattr(self, 'data', n.get_object_value(CanonicalSigner)),
             "success": lambda n : setattr(self, 'success', n.get_bool_value()),
         }
         return fields

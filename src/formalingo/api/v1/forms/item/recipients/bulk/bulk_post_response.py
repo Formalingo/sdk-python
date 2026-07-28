@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .......models.recipient import Recipient
+    from .......models.canonical_recipient import CanonicalRecipient
 
 @dataclass
 class BulkPostResponse(AdditionalDataHolder, Parsable):
@@ -13,7 +13,7 @@ class BulkPostResponse(AdditionalDataHolder, Parsable):
     additional_data: dict[str, Any] = field(default_factory=dict)
 
     # The data property
-    data: Optional[list[Recipient]] = None
+    data: Optional[list[CanonicalRecipient]] = None
     # The success property
     success: Optional[bool] = None
     
@@ -33,12 +33,12 @@ class BulkPostResponse(AdditionalDataHolder, Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .......models.recipient import Recipient
+        from .......models.canonical_recipient import CanonicalRecipient
 
-        from .......models.recipient import Recipient
+        from .......models.canonical_recipient import CanonicalRecipient
 
         fields: dict[str, Callable[[Any], None]] = {
-            "data": lambda n : setattr(self, 'data', n.get_collection_of_object_values(Recipient)),
+            "data": lambda n : setattr(self, 'data', n.get_collection_of_object_values(CanonicalRecipient)),
             "success": lambda n : setattr(self, 'success', n.get_bool_value()),
         }
         return fields

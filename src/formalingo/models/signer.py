@@ -34,7 +34,7 @@ class Signer(AdditionalDataHolder, Parsable):
     name: Optional[str] = None
     # The order property
     order: Optional[float] = None
-    # Responses are canonical E.164 phone values stored after successful creates and edits.
+    # Stored phone value. Legacy list/get records can retain their pre-normalization stored value until corrected.
     phone: Optional[str] = None
     # The role property
     role: Optional[str] = None

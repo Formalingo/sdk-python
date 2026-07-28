@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from ......models.document_submission import DocumentSubmission
+    from ......models.canonical_document_submission import CanonicalDocumentSubmission
 
 @dataclass
 class SubmissionsPostResponse(AdditionalDataHolder, Parsable):
@@ -13,7 +13,7 @@ class SubmissionsPostResponse(AdditionalDataHolder, Parsable):
     additional_data: dict[str, Any] = field(default_factory=dict)
 
     # The data property
-    data: Optional[DocumentSubmission] = None
+    data: Optional[CanonicalDocumentSubmission] = None
     # The success property
     success: Optional[bool] = None
     
@@ -33,12 +33,12 @@ class SubmissionsPostResponse(AdditionalDataHolder, Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from ......models.document_submission import DocumentSubmission
+        from ......models.canonical_document_submission import CanonicalDocumentSubmission
 
-        from ......models.document_submission import DocumentSubmission
+        from ......models.canonical_document_submission import CanonicalDocumentSubmission
 
         fields: dict[str, Callable[[Any], None]] = {
-            "data": lambda n : setattr(self, 'data', n.get_object_value(DocumentSubmission)),
+            "data": lambda n : setattr(self, 'data', n.get_object_value(CanonicalDocumentSubmission)),
             "success": lambda n : setattr(self, 'success', n.get_bool_value()),
         }
         return fields

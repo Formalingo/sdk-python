@@ -14,8 +14,8 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .........models.phone_validation_error import PhoneValidationError
     from .........models.update_signer_body import UpdateSignerBody
+    from .........models.validation_error import ValidationError
     from .responses.responses_request_builder import ResponsesRequestBuilder
     from .with_signer_delete_response import WithSignerDeleteResponse
     from .with_signer_put_response import WithSignerPutResponse
@@ -60,10 +60,10 @@ class WithSignerItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_put_request_information(
             body, request_configuration
         )
-        from .........models.phone_validation_error import PhoneValidationError
+        from .........models.validation_error import ValidationError
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": PhoneValidationError,
+            "400": ValidationError,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

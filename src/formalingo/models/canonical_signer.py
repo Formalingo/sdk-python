@@ -5,32 +5,34 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .validation_error import ValidationError
+    from .signer import Signer
 
-from .validation_error import ValidationError
+from .signer import Signer
 
 @dataclass
-class PhoneValidationError(ValidationError, Parsable):
+class CanonicalSigner(Signer, Parsable):
+    # Canonical E.164 phone value returned after a successful create or phone edit.
+    phone: Optional[str] = None
     
     @staticmethod
-    def create_from_discriminator_value(parse_node: ParseNode) -> PhoneValidationError:
+    def create_from_discriminator_value(parse_node: ParseNode) -> CanonicalSigner:
         """
         Creates a new instance of the appropriate class based on discriminator value
         param parse_node: The parse node to use to read the discriminator value and create the object
-        Returns: PhoneValidationError
+        Returns: CanonicalSigner
         """
         if parse_node is None:
             raise TypeError("parse_node cannot be null.")
-        return PhoneValidationError()
+        return CanonicalSigner()
     
     def get_field_deserializers(self,) -> dict[str, Callable[[ParseNode], None]]:
         """
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .validation_error import ValidationError
+        from .signer import Signer
 
-        from .validation_error import ValidationError
+        from .signer import Signer
 
         fields: dict[str, Callable[[Any], None]] = {
         }

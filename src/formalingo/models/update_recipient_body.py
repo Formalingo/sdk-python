@@ -10,6 +10,8 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
+    # Set true to clear the stored phone number. Omit to leave it unchanged.
+    clear_phone: Optional[bool] = None
     # The email property
     email: Optional[str] = None
     # The expires_at property
@@ -18,9 +20,9 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
     is_active: Optional[bool] = None
     # The label property
     label: Optional[str] = None
-    # null to remove password
+    # The password property
     password: Optional[str] = None
-    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
+    # Accepted formatted phone input (maximum 80 characters). International input may include spaces, parentheses, and hyphens but must include `+`; national input uses the workspace default country.
     phone: Optional[str] = None
     
     @staticmethod
@@ -40,6 +42,7 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "clearPhone": lambda n : setattr(self, 'clear_phone', n.get_bool_value()),
             "email": lambda n : setattr(self, 'email', n.get_str_value()),
             "expires_at": lambda n : setattr(self, 'expires_at', n.get_datetime_value()),
             "is_active": lambda n : setattr(self, 'is_active', n.get_bool_value()),
@@ -57,6 +60,7 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_bool_value("clearPhone", self.clear_phone)
         writer.write_str_value("email", self.email)
         writer.write_datetime_value("expires_at", self.expires_at)
         writer.write_bool_value("is_active", self.is_active)

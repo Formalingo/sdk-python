@@ -16,7 +16,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.create_recipient_body import CreateRecipientBody
-    from ......models.phone_validation_error import PhoneValidationError
+    from ......models.validation_error import ValidationError
     from .bulk.bulk_request_builder import BulkRequestBuilder
     from .item.with_r_item_request_builder import WithRItemRequestBuilder
     from .recipients_get_response import RecipientsGetResponse
@@ -76,10 +76,10 @@ class RecipientsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
-        from ......models.phone_validation_error import PhoneValidationError
+        from ......models.validation_error import ValidationError
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": PhoneValidationError,
+            "400": ValidationError,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

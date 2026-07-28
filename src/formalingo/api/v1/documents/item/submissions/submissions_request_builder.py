@@ -16,7 +16,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.create_submission_body import CreateSubmissionBody
-    from ......models.phone_validation_error import PhoneValidationError
+    from ......models.validation_error import ValidationError
     from .item.with_s_item_request_builder import WithSItemRequestBuilder
     from .submissions_get_response import SubmissionsGetResponse
     from .submissions_post_response import SubmissionsPostResponse
@@ -75,10 +75,10 @@ class SubmissionsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
-        from ......models.phone_validation_error import PhoneValidationError
+        from ......models.validation_error import ValidationError
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": PhoneValidationError,
+            "400": ValidationError,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

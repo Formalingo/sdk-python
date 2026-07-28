@@ -34,6 +34,8 @@ class Signer(AdditionalDataHolder, Parsable):
     name: Optional[str] = None
     # The order property
     order: Optional[float] = None
+    # Responses are canonical E.164 phone values stored after successful creates and edits.
+    phone: Optional[str] = None
     # The role property
     role: Optional[str] = None
     # The status property
@@ -74,6 +76,7 @@ class Signer(AdditionalDataHolder, Parsable):
             "link": lambda n : setattr(self, 'link', n.get_str_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
             "order": lambda n : setattr(self, 'order', n.get_float_value()),
+            "phone": lambda n : setattr(self, 'phone', n.get_str_value()),
             "role": lambda n : setattr(self, 'role', n.get_str_value()),
             "status": lambda n : setattr(self, 'status', n.get_enum_value(Signer_status)),
             "submissionId": lambda n : setattr(self, 'submission_id', n.get_uuid_value()),
@@ -99,6 +102,7 @@ class Signer(AdditionalDataHolder, Parsable):
         writer.write_str_value("link", self.link)
         writer.write_str_value("name", self.name)
         writer.write_float_value("order", self.order)
+        writer.write_str_value("phone", self.phone)
         writer.write_str_value("role", self.role)
         writer.write_enum_value("status", self.status)
         writer.write_uuid_value("submissionId", self.submission_id)

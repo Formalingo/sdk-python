@@ -18,7 +18,7 @@ class SignerInput(AdditionalDataHolder, Parsable):
     name: Optional[str] = None
     # Optional password to protect the signing link
     password: Optional[str] = None
-    # The phone property
+    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
     # Map of field identifier → pre-filled value. Keys can be field UUIDs or field labels. Label-based keys are resolved against fields assigned to this signer's role. If a label matches multiple fields for the same role, the request is rejected with disambiguation details. Creates DocumentResponse records immediately.
     prefill: Optional[SignerInput_prefill] = None

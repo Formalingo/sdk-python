@@ -20,7 +20,7 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
     label: Optional[str] = None
     # null to remove password
     password: Optional[str] = None
-    # The phone property
+    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
     
     @staticmethod

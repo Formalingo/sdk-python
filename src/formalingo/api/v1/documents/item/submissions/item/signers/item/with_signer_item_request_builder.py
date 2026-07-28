@@ -14,9 +14,10 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .........models.phone_validation_error import PhoneValidationError
+    from .........models.update_signer_body import UpdateSignerBody
     from .responses.responses_request_builder import ResponsesRequestBuilder
     from .with_signer_delete_response import WithSignerDeleteResponse
-    from .with_signer_put_request_body import WithSignerPutRequestBody
     from .with_signer_put_response import WithSignerPutResponse
 
 class WithSignerItemRequestBuilder(BaseRequestBuilder):
@@ -47,7 +48,7 @@ class WithSignerItemRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, WithSignerDeleteResponse, None)
     
-    async def put(self,body: WithSignerPutRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[WithSignerPutResponse]:
+    async def put(self,body: UpdateSignerBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[WithSignerPutResponse]:
         """
         Update a signer
         param body: The request body
@@ -59,11 +60,16 @@ class WithSignerItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_put_request_information(
             body, request_configuration
         )
+        from .........models.phone_validation_error import PhoneValidationError
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": PhoneValidationError,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .with_signer_put_response import WithSignerPutResponse
 
-        return await self.request_adapter.send_async(request_info, WithSignerPutResponse, None)
+        return await self.request_adapter.send_async(request_info, WithSignerPutResponse, error_mapping)
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
@@ -76,7 +82,7 @@ class WithSignerItemRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_put_request_information(self,body: WithSignerPutRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_put_request_information(self,body: UpdateSignerBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Update a signer
         param body: The request body

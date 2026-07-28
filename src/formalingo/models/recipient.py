@@ -36,7 +36,7 @@ class Recipient(AdditionalDataHolder, Parsable):
     last_activity_at: Optional[datetime.datetime] = None
     # The link property
     link: Optional[str] = None
-    # The phone property
+    # Responses are canonical E.164 phone values stored after successful creates and edits.
     phone: Optional[str] = None
     # The response_count property
     response_count: Optional[float] = None

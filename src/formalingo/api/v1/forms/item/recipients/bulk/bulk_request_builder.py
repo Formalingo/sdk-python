@@ -14,7 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .bulk400_error import Bulk400Error
+    from .......models.phone_validation_error import PhoneValidationError
     from .bulk403_error import Bulk403Error
     from .bulk404_error import Bulk404Error
     from .bulk_post_request_body import BulkPostRequestBody
@@ -45,12 +45,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
-        from .bulk400_error import Bulk400Error
+        from .......models.phone_validation_error import PhoneValidationError
         from .bulk403_error import Bulk403Error
         from .bulk404_error import Bulk404Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": Bulk400Error,
+            "400": PhoneValidationError,
             "403": Bulk403Error,
             "404": Bulk404Error,
         }

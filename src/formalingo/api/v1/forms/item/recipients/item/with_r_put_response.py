@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .......models.canonical_recipient import CanonicalRecipient
+    from .......models.recipient_update import RecipientUpdate
 
 @dataclass
 class WithRPutResponse(AdditionalDataHolder, Parsable):
@@ -13,7 +13,7 @@ class WithRPutResponse(AdditionalDataHolder, Parsable):
     additional_data: dict[str, Any] = field(default_factory=dict)
 
     # The data property
-    data: Optional[CanonicalRecipient] = None
+    data: Optional[RecipientUpdate] = None
     # The success property
     success: Optional[bool] = None
     
@@ -33,12 +33,12 @@ class WithRPutResponse(AdditionalDataHolder, Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .......models.canonical_recipient import CanonicalRecipient
+        from .......models.recipient_update import RecipientUpdate
 
-        from .......models.canonical_recipient import CanonicalRecipient
+        from .......models.recipient_update import RecipientUpdate
 
         fields: dict[str, Callable[[Any], None]] = {
-            "data": lambda n : setattr(self, 'data', n.get_object_value(CanonicalRecipient)),
+            "data": lambda n : setattr(self, 'data', n.get_object_value(RecipientUpdate)),
             "success": lambda n : setattr(self, 'success', n.get_bool_value()),
         }
         return fields

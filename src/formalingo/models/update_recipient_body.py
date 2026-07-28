@@ -10,7 +10,7 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
-    # Set true to clear the stored phone number. Omit to leave it unchanged.
+    # Set true to clear the stored phone. Omit to leave it unchanged; cannot be combined with a non-null phone.
     clear_phone: Optional[bool] = None
     # The email property
     email: Optional[str] = None
@@ -20,9 +20,9 @@ class UpdateRecipientBody(AdditionalDataHolder, Parsable):
     is_active: Optional[bool] = None
     # The label property
     label: Optional[str] = None
-    # The password property
+    # Write-only; null removes the password.
     password: Optional[str] = None
-    # Accepted formatted phone input (maximum 80 characters). International input may include spaces, parentheses, and hyphens but must include `+`; national input uses the workspace default country.
+    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
     
     @staticmethod

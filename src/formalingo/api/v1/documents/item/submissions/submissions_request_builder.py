@@ -16,10 +16,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.create_submission_body import CreateSubmissionBody
+    from ......models.create_submission_response import CreateSubmissionResponse
     from ......models.validation_error import ValidationError
+    from .create_submission_response409_error import CreateSubmissionResponse409Error
     from .item.with_s_item_request_builder import WithSItemRequestBuilder
     from .submissions_get_response import SubmissionsGetResponse
-    from .submissions_post_response import SubmissionsPostResponse
 
 class SubmissionsRequestBuilder(BaseRequestBuilder):
     """
@@ -63,12 +64,12 @@ class SubmissionsRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, SubmissionsGetResponse, None)
     
-    async def post(self,body: CreateSubmissionBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SubmissionsPostResponse]:
+    async def post(self,body: CreateSubmissionBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[CreateSubmissionResponse]:
         """
         Creates a signing submission. Each signer entry maps to a signer role. Use the `prefill` field to pre-fill specific document fields for a signer. Prefill keys can be field UUIDs or field labels (resolved per signer role). The `readonlyFieldIds` field also accepts labels. Notifications are suppressed by default; set `suppress_notifications` to false to send signer invites.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[SubmissionsPostResponse]
+        Returns: Optional[CreateSubmissionResponse]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -76,15 +77,17 @@ class SubmissionsRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from ......models.validation_error import ValidationError
+        from .create_submission_response409_error import CreateSubmissionResponse409Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ValidationError,
+            "409": CreateSubmissionResponse409Error,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .submissions_post_response import SubmissionsPostResponse
+        from ......models.create_submission_response import CreateSubmissionResponse
 
-        return await self.request_adapter.send_async(request_info, SubmissionsPostResponse, error_mapping)
+        return await self.request_adapter.send_async(request_info, CreateSubmissionResponse, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """

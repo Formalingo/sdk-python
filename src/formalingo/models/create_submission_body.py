@@ -10,6 +10,9 @@ if TYPE_CHECKING:
 
 @dataclass
 class CreateSubmissionBody(AdditionalDataHolder, Parsable):
+    """
+    Creates a signing submission. The normalized serialized request cannot exceed 1048576 UTF-8 bytes.
+    """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
@@ -17,7 +20,7 @@ class CreateSubmissionBody(AdditionalDataHolder, Parsable):
 
     # Signing experience used by generated links. Defaults to the document signing view.
     delivery_format: Optional[CreateSubmissionBody_deliveryFormat] = CreateSubmissionBody_deliveryFormat("document")
-    # One entry per signer role. Must provide all required roles.
+    # One entry per signer role. Must provide all required roles. Maximum 100 signers per submission.
     signers: Optional[list[SignerInput]] = None
     # Suppresses signer_invite notifications for all signers in this submission. Defaults to true; set false to send notifications.
     suppress_notifications: Optional[bool] = None

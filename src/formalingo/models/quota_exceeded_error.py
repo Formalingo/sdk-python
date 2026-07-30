@@ -6,17 +6,15 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .phone_validation_details import PhoneValidationDetails
+    from .quota_exceeded_error_code import QuotaExceededError_code
 
 @dataclass
-class ValidationError(APIError, AdditionalDataHolder, Parsable):
+class QuotaExceededError(APIError, AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
-    # Stable machine-readable error code when available.
-    code: Optional[str] = None
-    # The details property
-    details: Optional[PhoneValidationDetails] = None
+    # The requested operation would exceed a workspace plan limit.
+    code: Optional[QuotaExceededError_code] = None
     # The error property
     error: Optional[str] = None
     # The hint property
@@ -25,28 +23,27 @@ class ValidationError(APIError, AdditionalDataHolder, Parsable):
     success: Optional[bool] = None
     
     @staticmethod
-    def create_from_discriminator_value(parse_node: ParseNode) -> ValidationError:
+    def create_from_discriminator_value(parse_node: ParseNode) -> QuotaExceededError:
         """
         Creates a new instance of the appropriate class based on discriminator value
         param parse_node: The parse node to use to read the discriminator value and create the object
-        Returns: ValidationError
+        Returns: QuotaExceededError
         """
         if parse_node is None:
             raise TypeError("parse_node cannot be null.")
-        return ValidationError()
+        return QuotaExceededError()
     
     def get_field_deserializers(self,) -> dict[str, Callable[[ParseNode], None]]:
         """
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .phone_validation_details import PhoneValidationDetails
+        from .quota_exceeded_error_code import QuotaExceededError_code
 
-        from .phone_validation_details import PhoneValidationDetails
+        from .quota_exceeded_error_code import QuotaExceededError_code
 
         fields: dict[str, Callable[[Any], None]] = {
-            "code": lambda n : setattr(self, 'code', n.get_str_value()),
-            "details": lambda n : setattr(self, 'details', n.get_object_value(PhoneValidationDetails)),
+            "code": lambda n : setattr(self, 'code', n.get_enum_value(QuotaExceededError_code)),
             "error": lambda n : setattr(self, 'error', n.get_str_value()),
             "hint": lambda n : setattr(self, 'hint', n.get_str_value()),
             "success": lambda n : setattr(self, 'success', n.get_bool_value()),
@@ -61,8 +58,7 @@ class ValidationError(APIError, AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_str_value("code", self.code)
-        writer.write_object_value("details", self.details)
+        writer.write_enum_value("code", self.code)
         writer.write_str_value("error", self.error)
         writer.write_str_value("hint", self.hint)
         writer.write_bool_value("success", self.success)

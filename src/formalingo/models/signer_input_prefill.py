@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class SignerInput_prefill(AdditionalDataHolder, Parsable):
     """
-    Map of field identifier → pre-filled value. Keys can be field UUIDs or field labels. Label-based keys are resolved against fields assigned to this signer's role. If a label matches multiple fields for the same role, the request is rejected with disambiguation details. Creates DocumentResponse records immediately.
+    Map of field identifier → pre-filled value. Keys can be field UUIDs or field labels. Label-based keys are resolved against fields assigned to this signer's role. If a label matches multiple fields for the same role, the request is rejected with disambiguation details. At most 100 fields, 10 nesting levels, and 65536 serialized UTF-8 bytes are accepted per signer. Creates DocumentResponse records immediately.
     """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)

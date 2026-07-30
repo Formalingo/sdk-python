@@ -67,7 +67,7 @@ class SubmissionsRequestBuilder(BaseRequestBuilder):
     async def post(self,body: CreateSubmissionBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[CreateSubmissionResponse]:
         """
         Creates a signing submission. Each signer entry maps to a signer role. Use the `prefill` field to pre-fill specific document fields for a signer. Prefill keys can be field UUIDs or field labels (resolved per signer role). The `readonlyFieldIds` field also accepts labels. Notifications are suppressed by default; set `suppress_notifications` to false to send signer invites.
-        param body: The request body
+        param body: Creates a signing submission. The normalized serialized request cannot exceed 1048576 UTF-8 bytes.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[CreateSubmissionResponse]
         """
@@ -103,7 +103,7 @@ class SubmissionsRequestBuilder(BaseRequestBuilder):
     def to_post_request_information(self,body: CreateSubmissionBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates a signing submission. Each signer entry maps to a signer role. Use the `prefill` field to pre-fill specific document fields for a signer. Prefill keys can be field UUIDs or field labels (resolved per signer role). The `readonlyFieldIds` field also accepts labels. Notifications are suppressed by default; set `suppress_notifications` to false to send signer invites.
-        param body: The request body
+        param body: Creates a signing submission. The normalized serialized request cannot exceed 1048576 UTF-8 bytes.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

@@ -10,6 +10,8 @@ class Forms400Error(APIError, AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
+    # Stable machine-readable error code when available.
+    code: Optional[str] = None
     # The error property
     error: Optional[str] = None
     # The hint property
@@ -34,6 +36,7 @@ class Forms400Error(APIError, AdditionalDataHolder, Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "code": lambda n : setattr(self, 'code', n.get_str_value()),
             "error": lambda n : setattr(self, 'error', n.get_str_value()),
             "hint": lambda n : setattr(self, 'hint', n.get_str_value()),
             "success": lambda n : setattr(self, 'success', n.get_bool_value()),
@@ -48,6 +51,7 @@ class Forms400Error(APIError, AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_str_value("code", self.code)
         writer.write_str_value("error", self.error)
         writer.write_str_value("hint", self.hint)
         writer.write_bool_value("success", self.success)

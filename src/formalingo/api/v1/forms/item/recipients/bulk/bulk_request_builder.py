@@ -14,9 +14,11 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .......models.quota_exceeded_error import QuotaExceededError
     from .......models.validation_error import ValidationError
     from .bulk403_error import Bulk403Error
     from .bulk404_error import Bulk404Error
+    from .bulk409_error import Bulk409Error
     from .bulk_post_request_body import BulkPostRequestBody
     from .bulk_post_response import BulkPostResponse
 
@@ -35,7 +37,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: BulkPostRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[BulkPostResponse]:
         """
-        Creates up to 100 recipients in one request. Requires `recipients:bulk`, and also `recipients:send_notifications` when `sendNotifications` is true.
+        Creates up to 100 recipients in one request. Requires `recipients:bulk`, and also `recipients:send_notifications` when `sendNotifications` is true. A caller-owned Idempotency-Key is required; reuse it only with the exact same serialized request body.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[BulkPostResponse]
@@ -45,14 +47,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
+        from .......models.quota_exceeded_error import QuotaExceededError
         from .......models.validation_error import ValidationError
         from .bulk403_error import Bulk403Error
         from .bulk404_error import Bulk404Error
+        from .bulk409_error import Bulk409Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ValidationError,
+            "402": QuotaExceededError,
             "403": Bulk403Error,
             "404": Bulk404Error,
+            "409": Bulk409Error,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -62,7 +68,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: BulkPostRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates up to 100 recipients in one request. Requires `recipients:bulk`, and also `recipients:send_notifications` when `sendNotifications` is true.
+        Creates up to 100 recipients in one request. Requires `recipients:bulk`, and also `recipients:send_notifications` when `sendNotifications` is true. A caller-owned Idempotency-Key is required; reuse it only with the exact same serialized request body.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

@@ -20,7 +20,7 @@ class SignerInput(AdditionalDataHolder, Parsable):
     password: Optional[str] = None
     # Accepted formatted phone input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
-    # Map of field identifier → pre-filled value. Keys can be field UUIDs or field labels. Label-based keys are resolved against fields assigned to this signer's role. If a label matches multiple fields for the same role, the request is rejected with disambiguation details. Creates DocumentResponse records immediately.
+    # Map of field identifier → pre-filled value. Keys can be field UUIDs or field labels. Label-based keys are resolved against fields assigned to this signer's role. If a label matches multiple fields for the same role, the request is rejected with disambiguation details. At most 100 fields, 10 nesting levels, and 65536 serialized UTF-8 bytes are accepted per signer. Creates DocumentResponse records immediately.
     prefill: Optional[SignerInput_prefill] = None
     # If true, prefilled fields are marked read-only on the document
     prefill_readonly: Optional[bool] = None

@@ -57,12 +57,56 @@ recipient = await client.api.v1.forms.by_form_id("FORM_ID").recipients.post(body
 print(recipient.link)
 ```
 
+### Bulk create recipients safely
+
+```python
+from uuid import UUID
+from formalingo import create_bulk_recipients
+from formalingo.api.v1.forms.item.recipients.bulk.bulk_post_request_body import BulkPostRequestBody
+from formalingo.api.v1.forms.item.recipients.bulk.bulk_post_request_body_recipients import BulkPostRequestBody_recipients
+
+body = BulkPostRequestBody(
+    confirm_bulk=True,
+    recipients=[
+        BulkPostRequestBody_recipients(
+            label="Alice",
+            email="alice@example.com",
+        ),
+    ],
+)
+recipients = await create_bulk_recipients(
+    client,
+    UUID("00000000-0000-0000-0000-000000000001"),
+    body,
+    "recipient-bulk-create-7f3f",
+)
+```
+
+The required caller-owned key makes ambiguous retries safe. Reuse it only with the exact same serialized request body.
+On `idempotency_request_in_progress`, retry the exact body with the same key. A different body returns `idempotency_key_conflict`; recipient erasure returns `idempotency_replay_unavailable`.
+
 ### Create a document submission
 
 ```python
-from formalingo.models.create_submission_body import CreateSubmissionBody
+from uuid import UUID
 
-submission = await client.api.v1.documents.by_document_id("DOC_ID").submissions.post(body)
+from formalingo import create_document_submission
+from formalingo.models.create_submission_body import CreateSubmissionBody
+from formalingo.models.signer_input import SignerInput
+
+body = CreateSubmissionBody(
+    signers=[SignerInput(
+        role="signer_1",
+        name="Alice",
+        email="alice@example.com",
+    )],
+)
+submission = await create_document_submission(
+    client,
+    UUID("00000000-0000-0000-0000-000000000001"),
+    body,
+    "document-create-7f3f",
+)
 print(submission.signers[0].link)
 ```
 

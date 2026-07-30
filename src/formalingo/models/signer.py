@@ -28,7 +28,7 @@ class Signer(AdditionalDataHolder, Parsable):
     id: Optional[UUID] = None
     # The label property
     label: Optional[str] = None
-    # The link property
+    # Signing link for a live document and signer; null when lifecycle rules withhold access.
     link: Optional[str] = None
     # The name property
     name: Optional[str] = None
@@ -42,7 +42,7 @@ class Signer(AdditionalDataHolder, Parsable):
     status: Optional[Signer_status] = None
     # The submissionId property
     submission_id: Optional[UUID] = None
-    # The token property
+    # Bearer signing token; omitted when the document or signer is no longer live.
     token: Optional[str] = None
     
     @staticmethod

@@ -16,6 +16,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.create_field_body import CreateFieldBody
+    from ......models.document_not_editable_conflict import DocumentNotEditableConflict
     from .fields_get_response import FieldsGetResponse
     from .fields_post_response import FieldsPostResponse
     from .item.with_f_item_request_builder import WithFItemRequestBuilder
@@ -74,11 +75,16 @@ class FieldsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
+        from ......models.document_not_editable_conflict import DocumentNotEditableConflict
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "409": DocumentNotEditableConflict,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .fields_post_response import FieldsPostResponse
 
-        return await self.request_adapter.send_async(request_info, FieldsPostResponse, None)
+        return await self.request_adapter.send_async(request_info, FieldsPostResponse, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """

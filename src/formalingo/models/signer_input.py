@@ -22,7 +22,7 @@ class SignerInput(AdditionalDataHolder, Parsable):
     phone: Optional[str] = None
     # Map of field identifier → pre-filled value. Keys can be field UUIDs or field labels. Label-based keys are resolved against fields assigned to this signer's role. If a label matches multiple fields for the same role, the request is rejected with disambiguation details. At most 100 fields, 10 nesting levels, and 65536 serialized UTF-8 bytes are accepted per signer. Creates DocumentResponse records immediately.
     prefill: Optional[SignerInput_prefill] = None
-    # If true, prefilled fields are marked read-only on the document
+    # If true, prefilled fields are marked read-only for this signer only.
     prefill_readonly: Optional[bool] = None
     # List of field IDs or field labels to mark as read-only for this signer, regardless of the document-level isReadOnly setting. Labels are resolved against fields assigned to this signer's role. Useful for locking specific fields per-signer at submission time.
     readonly_field_ids: Optional[list[str]] = None

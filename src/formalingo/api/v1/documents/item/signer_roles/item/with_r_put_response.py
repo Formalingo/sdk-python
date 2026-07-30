@@ -5,44 +5,41 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .documents_put_request_body_status import DocumentsPutRequestBody_status
+    from .......models.signer_role import SignerRole
 
 @dataclass
-class DocumentsPutRequestBody(AdditionalDataHolder, Parsable):
+class WithRPutResponse(AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
-    # The pageCount property
-    page_count: Optional[int] = None
-    # The status property
-    status: Optional[DocumentsPutRequestBody_status] = None
-    # The title property
-    title: Optional[str] = None
+    # The data property
+    data: Optional[SignerRole] = None
+    # The success property
+    success: Optional[bool] = None
     
     @staticmethod
-    def create_from_discriminator_value(parse_node: ParseNode) -> DocumentsPutRequestBody:
+    def create_from_discriminator_value(parse_node: ParseNode) -> WithRPutResponse:
         """
         Creates a new instance of the appropriate class based on discriminator value
         param parse_node: The parse node to use to read the discriminator value and create the object
-        Returns: DocumentsPutRequestBody
+        Returns: WithRPutResponse
         """
         if parse_node is None:
             raise TypeError("parse_node cannot be null.")
-        return DocumentsPutRequestBody()
+        return WithRPutResponse()
     
     def get_field_deserializers(self,) -> dict[str, Callable[[ParseNode], None]]:
         """
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .documents_put_request_body_status import DocumentsPutRequestBody_status
+        from .......models.signer_role import SignerRole
 
-        from .documents_put_request_body_status import DocumentsPutRequestBody_status
+        from .......models.signer_role import SignerRole
 
         fields: dict[str, Callable[[Any], None]] = {
-            "pageCount": lambda n : setattr(self, 'page_count', n.get_int_value()),
-            "status": lambda n : setattr(self, 'status', n.get_enum_value(DocumentsPutRequestBody_status)),
-            "title": lambda n : setattr(self, 'title', n.get_str_value()),
+            "data": lambda n : setattr(self, 'data', n.get_object_value(SignerRole)),
+            "success": lambda n : setattr(self, 'success', n.get_bool_value()),
         }
         return fields
     
@@ -54,9 +51,8 @@ class DocumentsPutRequestBody(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("pageCount", self.page_count)
-        writer.write_enum_value("status", self.status)
-        writer.write_str_value("title", self.title)
+        writer.write_object_value("data", self.data)
+        writer.write_bool_value("success", self.success)
         writer.write_additional_data_value(self.additional_data)
     
 

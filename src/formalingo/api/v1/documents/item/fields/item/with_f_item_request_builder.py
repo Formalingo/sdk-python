@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .......models.document_not_editable_conflict import DocumentNotEditableConflict
     from .with_f_delete_response import WithFDeleteResponse
     from .with_f_put_request_body import WithFPutRequestBody
     from .with_f_put_response import WithFPutResponse
@@ -40,11 +41,16 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_delete_request_information(
             request_configuration
         )
+        from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "409": DocumentNotEditableConflict,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .with_f_delete_response import WithFDeleteResponse
 
-        return await self.request_adapter.send_async(request_info, WithFDeleteResponse, None)
+        return await self.request_adapter.send_async(request_info, WithFDeleteResponse, error_mapping)
     
     async def put(self,body: WithFPutRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[WithFPutResponse]:
         """
@@ -58,11 +64,16 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_put_request_information(
             body, request_configuration
         )
+        from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "409": DocumentNotEditableConflict,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .with_f_put_response import WithFPutResponse
 
-        return await self.request_adapter.send_async(request_info, WithFPutResponse, None)
+        return await self.request_adapter.send_async(request_info, WithFPutResponse, error_mapping)
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """

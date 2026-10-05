@@ -14,7 +14,10 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.document_not_editable_conflict import DocumentNotEditableConflict
     from .delete_permanent_query_parameter_type import DeletePermanentQueryParameterType
+    from .documents400_error import Documents400Error
+    from .documents404_error import Documents404Error
     from .documents_delete_response import DocumentsDeleteResponse
     from .documents_get_response import DocumentsGetResponse
     from .documents_put_request_body import DocumentsPutRequestBody
@@ -72,7 +75,7 @@ class DocumentsItemRequestBuilder(BaseRequestBuilder):
     
     async def put(self,body: DocumentsPutRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[DocumentsPutResponse]:
         """
-        Update a document
+        Updates editable document metadata. Snapshot-affecting changes move the document to draft. Publish through the dedicated publish endpoint so an immutable revision is created.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[DocumentsPutResponse]
@@ -82,11 +85,20 @@ class DocumentsItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_put_request_information(
             body, request_configuration
         )
+        from .....models.document_not_editable_conflict import DocumentNotEditableConflict
+        from .documents400_error import Documents400Error
+        from .documents404_error import Documents404Error
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": Documents400Error,
+            "404": Documents404Error,
+            "409": DocumentNotEditableConflict,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .documents_put_response import DocumentsPutResponse
 
-        return await self.request_adapter.send_async(request_info, DocumentsPutResponse, None)
+        return await self.request_adapter.send_async(request_info, DocumentsPutResponse, error_mapping)
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[DocumentsItemRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
@@ -112,7 +124,7 @@ class DocumentsItemRequestBuilder(BaseRequestBuilder):
     
     def to_put_request_information(self,body: DocumentsPutRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Update a document
+        Updates editable document metadata. Snapshot-affecting changes move the document to draft. Publish through the dedicated publish endpoint so an immutable revision is created.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

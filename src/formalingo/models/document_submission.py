@@ -24,6 +24,8 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
     created_at: Optional[datetime.datetime] = None
     # The documentId property
     document_id: Optional[UUID] = None
+    # Immutable document revision pinned to this submission.
+    document_revision_id: Optional[UUID] = None
     # The id property
     id: Optional[UUID] = None
     # Stable API-key-gated file descriptor for the completed signed PDF.
@@ -62,6 +64,7 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
             "completedPdfUrl": lambda n : setattr(self, 'completed_pdf_url', n.get_str_value()),
             "createdAt": lambda n : setattr(self, 'created_at', n.get_datetime_value()),
             "documentId": lambda n : setattr(self, 'document_id', n.get_uuid_value()),
+            "documentRevisionId": lambda n : setattr(self, 'document_revision_id', n.get_uuid_value()),
             "id": lambda n : setattr(self, 'id', n.get_uuid_value()),
             "signedPdf": lambda n : setattr(self, 'signed_pdf', n.get_object_value(DocumentSubmission_signedPdf)),
             "signers": lambda n : setattr(self, 'signers', n.get_collection_of_object_values(Signer)),
@@ -81,6 +84,7 @@ class DocumentSubmission(AdditionalDataHolder, Parsable):
         writer.write_str_value("completedPdfUrl", self.completed_pdf_url)
         writer.write_datetime_value("createdAt", self.created_at)
         writer.write_uuid_value("documentId", self.document_id)
+        writer.write_uuid_value("documentRevisionId", self.document_revision_id)
         writer.write_uuid_value("id", self.id)
         writer.write_object_value("signedPdf", self.signed_pdf)
         writer.write_collection_of_object_values("signers", self.signers)

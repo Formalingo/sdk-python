@@ -15,6 +15,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .......models.update_recipient_body import UpdateRecipientBody
+    from .......models.validation_error import ValidationError
     from .responses.responses_request_builder import ResponsesRequestBuilder
     from .with_r_delete_response import WithRDeleteResponse
     from .with_r_put_response import WithRPutResponse
@@ -59,11 +60,16 @@ class WithRItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_put_request_information(
             body, request_configuration
         )
+        from .......models.validation_error import ValidationError
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ValidationError,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .with_r_put_response import WithRPutResponse
 
-        return await self.request_adapter.send_async(request_info, WithRPutResponse, None)
+        return await self.request_adapter.send_async(request_info, WithRPutResponse, error_mapping)
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """

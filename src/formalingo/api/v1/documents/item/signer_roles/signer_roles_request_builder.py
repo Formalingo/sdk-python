@@ -16,6 +16,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.create_signer_role_body import CreateSignerRoleBody
+    from ......models.document_not_editable_conflict import DocumentNotEditableConflict
     from .item.with_r_item_request_builder import WithRItemRequestBuilder
     from .signer_roles_get_response import SignerRolesGetResponse
     from .signer_roles_post_response import SignerRolesPostResponse
@@ -74,11 +75,16 @@ class SignerRolesRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
+        from ......models.document_not_editable_conflict import DocumentNotEditableConflict
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "409": DocumentNotEditableConflict,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .signer_roles_post_response import SignerRolesPostResponse
 
-        return await self.request_adapter.send_async(request_info, SignerRolesPostResponse, None)
+        return await self.request_adapter.send_async(request_info, SignerRolesPostResponse, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """

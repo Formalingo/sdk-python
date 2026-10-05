@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .expire.expire_request_builder import ExpireRequestBuilder
     from .pdf.pdf_request_builder import PdfRequestBuilder
     from .signers.signers_request_builder import SignersRequestBuilder
     from .with_s404_error import WithS404Error
@@ -99,6 +100,15 @@ class WithSItemRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return WithSItemRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def expire(self) -> ExpireRequestBuilder:
+        """
+        The expire property
+        """
+        from .expire.expire_request_builder import ExpireRequestBuilder
+
+        return ExpireRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def pdf(self) -> PdfRequestBuilder:

@@ -12,6 +12,8 @@ class DocumentsPutRequestBody(AdditionalDataHolder, Parsable):
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
+    # The pageCount property
+    page_count: Optional[int] = None
     # The status property
     status: Optional[DocumentsPutRequestBody_status] = None
     # The title property
@@ -38,6 +40,7 @@ class DocumentsPutRequestBody(AdditionalDataHolder, Parsable):
         from .documents_put_request_body_status import DocumentsPutRequestBody_status
 
         fields: dict[str, Callable[[Any], None]] = {
+            "pageCount": lambda n : setattr(self, 'page_count', n.get_int_value()),
             "status": lambda n : setattr(self, 'status', n.get_enum_value(DocumentsPutRequestBody_status)),
             "title": lambda n : setattr(self, 'title', n.get_str_value()),
         }
@@ -51,6 +54,7 @@ class DocumentsPutRequestBody(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_int_value("pageCount", self.page_count)
         writer.write_enum_value("status", self.status)
         writer.write_str_value("title", self.title)
         writer.write_additional_data_value(self.additional_data)

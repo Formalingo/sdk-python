@@ -16,15 +16,25 @@ class DeliveriesGetResponse_data(AdditionalDataHolder, Parsable):
 
     # The attemptedAt property
     attempted_at: Optional[datetime.datetime] = None
+    # The blockedReason property
+    blocked_reason: Optional[str] = None
+    # The channel property
+    channel: Optional[str] = None
     # The eventType property
     event_type: Optional[str] = None
     # The id property
     id: Optional[UUID] = None
     # The profile property
     profile: Optional[DeliveriesGetResponse_data_profile] = None
+    # The providerStatus property
+    provider_status: Optional[str] = None
+    # The requestAccepted property
+    request_accepted: Optional[bool] = None
+    # The state property
+    state: Optional[str] = None
     # The statusCode property
     status_code: Optional[int] = None
-    # The success property
+    # For email and WhatsApp, whether the provider accepted the request. This does not establish inbox delivery; inspect state and providerStatus.
     success: Optional[bool] = None
     
     @staticmethod
@@ -49,9 +59,14 @@ class DeliveriesGetResponse_data(AdditionalDataHolder, Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "attemptedAt": lambda n : setattr(self, 'attempted_at', n.get_datetime_value()),
+            "blockedReason": lambda n : setattr(self, 'blocked_reason', n.get_str_value()),
+            "channel": lambda n : setattr(self, 'channel', n.get_str_value()),
             "eventType": lambda n : setattr(self, 'event_type', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_uuid_value()),
             "profile": lambda n : setattr(self, 'profile', n.get_object_value(DeliveriesGetResponse_data_profile)),
+            "providerStatus": lambda n : setattr(self, 'provider_status', n.get_str_value()),
+            "requestAccepted": lambda n : setattr(self, 'request_accepted', n.get_bool_value()),
+            "state": lambda n : setattr(self, 'state', n.get_str_value()),
             "statusCode": lambda n : setattr(self, 'status_code', n.get_int_value()),
             "success": lambda n : setattr(self, 'success', n.get_bool_value()),
         }
@@ -66,9 +81,14 @@ class DeliveriesGetResponse_data(AdditionalDataHolder, Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_datetime_value("attemptedAt", self.attempted_at)
+        writer.write_str_value("blockedReason", self.blocked_reason)
+        writer.write_str_value("channel", self.channel)
         writer.write_str_value("eventType", self.event_type)
         writer.write_uuid_value("id", self.id)
         writer.write_object_value("profile", self.profile)
+        writer.write_str_value("providerStatus", self.provider_status)
+        writer.write_bool_value("requestAccepted", self.request_accepted)
+        writer.write_str_value("state", self.state)
         writer.write_int_value("statusCode", self.status_code)
         writer.write_bool_value("success", self.success)
         writer.write_additional_data_value(self.additional_data)

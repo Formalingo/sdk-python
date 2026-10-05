@@ -5,14 +5,22 @@ from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, Par
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .create_submission_body_delivery_format import CreateSubmissionBody_deliveryFormat
     from .signer_input import SignerInput
 
 @dataclass
 class CreateSubmissionBody(AdditionalDataHolder, Parsable):
+    """
+    Creates a signing submission. The normalized serialized request cannot exceed 1048576 UTF-8 bytes.
+    """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
-    # One entry per signer role. Must provide all required roles.
+    from .create_submission_body_delivery_format import CreateSubmissionBody_deliveryFormat
+
+    # Signing experience used by generated links. Defaults to the document signing view.
+    delivery_format: Optional[CreateSubmissionBody_deliveryFormat] = CreateSubmissionBody_deliveryFormat("document")
+    # One entry per signer role. Must provide all required roles. Maximum 100 signers per submission.
     signers: Optional[list[SignerInput]] = None
     # Suppresses signer_invite notifications for all signers in this submission. Defaults to true; set false to send notifications.
     suppress_notifications: Optional[bool] = None
@@ -33,11 +41,14 @@ class CreateSubmissionBody(AdditionalDataHolder, Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .create_submission_body_delivery_format import CreateSubmissionBody_deliveryFormat
         from .signer_input import SignerInput
 
+        from .create_submission_body_delivery_format import CreateSubmissionBody_deliveryFormat
         from .signer_input import SignerInput
 
         fields: dict[str, Callable[[Any], None]] = {
+            "deliveryFormat": lambda n : setattr(self, 'delivery_format', n.get_enum_value(CreateSubmissionBody_deliveryFormat)),
             "signers": lambda n : setattr(self, 'signers', n.get_collection_of_object_values(SignerInput)),
             "suppress_notifications": lambda n : setattr(self, 'suppress_notifications', n.get_bool_value()),
         }
@@ -51,6 +62,7 @@ class CreateSubmissionBody(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_enum_value("deliveryFormat", self.delivery_format)
         writer.write_collection_of_object_values("signers", self.signers)
         writer.write_bool_value("suppress_notifications", self.suppress_notifications)
         writer.write_additional_data_value(self.additional_data)

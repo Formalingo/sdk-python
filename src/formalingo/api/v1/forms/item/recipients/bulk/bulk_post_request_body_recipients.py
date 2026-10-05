@@ -21,7 +21,7 @@ class BulkPostRequestBody_recipients(AdditionalDataHolder, Parsable):
     label: Optional[str] = None
     # The password property
     password: Optional[str] = None
-    # The phone property
+    # Accepted formatted input. International input may include spaces, parentheses, and hyphens, but must include `+`. National input uses the workspace default phone country.
     phone: Optional[str] = None
     # The prefill property
     prefill: Optional[BulkPostRequestBody_recipients_prefill] = None

@@ -5,4 +5,5 @@ class Document_status(str, Enum):
     Published = "published",
     Completed = "completed",
     Expired = "expired",
+    Voided = "voided",
 

@@ -20,7 +20,7 @@ class FileDescriptor(AdditionalDataHolder, Parsable):
     content_type: Optional[str] = None
     # The downloadMethod property
     download_method: Optional[FileDescriptor_downloadMethod] = None
-    # Formalingo API endpoint that requires Authorization: Bearer <api-key>
+    # Formalingo API endpoint requiring Authorization: Bearer <api-key>. Request it to receive JSON with a temporary storage URL, then fetch that URL for the bytes. Response uploads, including supporting files, require submissions:download_files; signed PDFs require submissions:download_pdf.
     download_url: Optional[str] = None
     # The fileId property
     file_id: Optional[UUID] = None

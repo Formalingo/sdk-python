@@ -16,7 +16,9 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.create_field_body import CreateFieldBody
-    from ......models.document_not_editable_conflict import DocumentNotEditableConflict
+    from .fields400_error import Fields400Error
+    from .fields403_error import Fields403Error
+    from .fields409_error import Fields409Error
     from .fields_get_response import FieldsGetResponse
     from .fields_post_response import FieldsPostResponse
     from .item.with_f_item_request_builder import WithFItemRequestBuilder
@@ -50,7 +52,7 @@ class FieldsRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[FieldsGetResponse]:
         """
-        List fields
+        Lists placed and non-positioned document fields. Page zero means no PDF-page placement. Workspace API keys with documents:read can read supporting request definitions without file-download permission. Session/OAuth access to those definitions requires the document creator. Actual uploaded values and downloads require separate authorization.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[FieldsGetResponse]
         """
@@ -65,8 +67,8 @@ class FieldsRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: CreateFieldBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[FieldsPostResponse]:
         """
-        Create a field
-        param body: The request body
+        Creates a placed field or supporting attachment request. For a supporting request, use type=file_upload, options.supporting_attachment=true and a valid assigneeRole; geometry may be omitted or all zero, and isRequired defaults to true. API keys need documents:write; session/OAuth users must be the document creator. File-download permission is not needed to author requests. Optional client id UUID supports identical retry replay; field purpose is immutable.
+        param body: Create a placed field or a supporting file_upload request. Supporting requests require options.supporting_attachment=true and an assigned signer; omitted geometry is canonicalized to all zero and Required defaults to true. Ordinary fields require complete page placement. Field purpose is immutable after creation.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[FieldsPostResponse]
         """
@@ -75,10 +77,14 @@ class FieldsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
-        from ......models.document_not_editable_conflict import DocumentNotEditableConflict
+        from .fields400_error import Fields400Error
+        from .fields403_error import Fields403Error
+        from .fields409_error import Fields409Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "409": DocumentNotEditableConflict,
+            "400": Fields400Error,
+            "403": Fields403Error,
+            "409": Fields409Error,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -88,7 +94,7 @@ class FieldsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        List fields
+        Lists placed and non-positioned document fields. Page zero means no PDF-page placement. Workspace API keys with documents:read can read supporting request definitions without file-download permission. Session/OAuth access to those definitions requires the document creator. Actual uploaded values and downloads require separate authorization.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -99,8 +105,8 @@ class FieldsRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: CreateFieldBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Create a field
-        param body: The request body
+        Creates a placed field or supporting attachment request. For a supporting request, use type=file_upload, options.supporting_attachment=true and a valid assigneeRole; geometry may be omitted or all zero, and isRequired defaults to true. API keys need documents:write; session/OAuth users must be the document creator. File-download permission is not needed to author requests. Optional client id UUID supports identical retry replay; field purpose is immutable.
+        param body: Create a placed field or a supporting file_upload request. Supporting requests require options.supporting_attachment=true and an assigned signer; omitted geometry is canonicalized to all zero and Required defaults to true. Ordinary fields require complete page placement. Field purpose is immutable after creation.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

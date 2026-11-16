@@ -14,7 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+    from .with_r409_error import WithR409Error
     from .with_r_delete_response import WithRDeleteResponse
     from .with_r_put_request_body import WithRPutRequestBody
     from .with_r_put_response import WithRPutResponse
@@ -41,10 +41,10 @@ class WithRItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_delete_request_information(
             request_configuration
         )
-        from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+        from .with_r409_error import WithR409Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "409": DocumentNotEditableConflict,
+            "409": WithR409Error,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -64,10 +64,10 @@ class WithRItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_put_request_information(
             body, request_configuration
         )
-        from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+        from .with_r409_error import WithR409Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "409": DocumentNotEditableConflict,
+            "409": WithR409Error,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

@@ -3,6 +3,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from kiota_abstractions.serialization import AdditionalDataHolder, Parsable, ParseNode, SerializationWriter
 from typing import Any, Optional, TYPE_CHECKING, Union
+from uuid import UUID
 
 if TYPE_CHECKING:
     from .create_field_body_direction import CreateFieldBody_direction
@@ -11,6 +12,9 @@ if TYPE_CHECKING:
 
 @dataclass
 class CreateFieldBody(AdditionalDataHolder, Parsable):
+    """
+    Create a placed field or a supporting file_upload request. Supporting requests require options.supporting_attachment=true and an assigned signer; omitted geometry is canonicalized to all zero and Required defaults to true. Ordinary fields require complete page placement. Field purpose is immutable after creation.
+    """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
@@ -22,27 +26,29 @@ class CreateFieldBody(AdditionalDataHolder, Parsable):
     assignee_role: Optional[str] = None
     # The defaultValue property
     default_value: Optional[str] = None
-    # The height property
+    # Required and positive for placed fields. Omit or use 0 for a supporting attachment request.
     height: Optional[float] = None
-    # The isReadOnly property
+    # Optional client UUID for retry-safe supporting attachment creation. Reusing the same UUID and request returns the original field; conflicting reuse returns 409. Not supported for placed fields.
+    id: Optional[UUID] = None
+    # Supporting attachment requests must remain writable.
     is_read_only: Optional[bool] = None
-    # The isRequired property
+    # Defaults to true for supporting attachment requests and false for ordinary placed fields.
     is_required: Optional[bool] = None
     # The label property
     label: Optional[str] = None
-    # Type-specific options. Calculation fields require formula and accept result_type ("text" or "number").
+    # Type-specific options, including additional options supported by the field type. For calculation fields, use formula and result_type (text or number).
     options: Optional[CreateFieldBody_options] = None
-    # The order property
+    # Field order. For supporting attachment requests, the value must be between 0 and 1,000,000 inclusive.
     order: Optional[int] = None
-    # The pageNumber property
+    # Required and at least 1 for placed fields. Omit or use 0 for a supporting attachment request.
     page_number: Optional[int] = None
     # The type property
     type: Optional[CreateFieldBody_type] = None
-    # The width property
+    # Required and positive for placed fields. Omit or use 0 for a supporting attachment request.
     width: Optional[float] = None
-    # The x property
+    # Required for placed fields. Omit or use 0 for a supporting attachment request.
     x: Optional[float] = None
-    # The y property
+    # Required for placed fields. Omit or use 0 for a supporting attachment request.
     y: Optional[float] = None
     
     @staticmethod
@@ -74,6 +80,7 @@ class CreateFieldBody(AdditionalDataHolder, Parsable):
             "defaultValue": lambda n : setattr(self, 'default_value', n.get_str_value()),
             "direction": lambda n : setattr(self, 'direction', n.get_enum_value(CreateFieldBody_direction)),
             "height": lambda n : setattr(self, 'height', n.get_float_value()),
+            "id": lambda n : setattr(self, 'id', n.get_uuid_value()),
             "isReadOnly": lambda n : setattr(self, 'is_read_only', n.get_bool_value()),
             "isRequired": lambda n : setattr(self, 'is_required', n.get_bool_value()),
             "label": lambda n : setattr(self, 'label', n.get_str_value()),
@@ -99,6 +106,7 @@ class CreateFieldBody(AdditionalDataHolder, Parsable):
         writer.write_str_value("defaultValue", self.default_value)
         writer.write_enum_value("direction", self.direction)
         writer.write_float_value("height", self.height)
+        writer.write_uuid_value("id", self.id)
         writer.write_bool_value("isReadOnly", self.is_read_only)
         writer.write_bool_value("isRequired", self.is_required)
         writer.write_str_value("label", self.label)

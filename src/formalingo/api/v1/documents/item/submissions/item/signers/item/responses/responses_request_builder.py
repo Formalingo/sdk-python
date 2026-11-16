@@ -34,18 +34,23 @@ class ResponsesRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ResponsesGetResponse]:
         """
-        Returns all saved field responses for this signer.
+        Returns saved responses classified from immutable submission metadata. Supporting upload responses are included for the document creator or a workspace API key with submissions:download_files, and omitted for other clients. Uploaded values use the existing authenticated file-descriptor download flow.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[ResponsesGetResponse]
         """
         request_info = self.to_get_request_information(
             request_configuration
         )
+        from .responses409_error import Responses409Error
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "409": Responses409Error,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .responses_get_response import ResponsesGetResponse
 
-        return await self.request_adapter.send_async(request_info, ResponsesGetResponse, None)
+        return await self.request_adapter.send_async(request_info, ResponsesGetResponse, error_mapping)
     
     async def patch(self,body: UpdateSignerResponsesBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ResponsesPatchResponse]:
         """
@@ -72,7 +77,7 @@ class ResponsesRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns all saved field responses for this signer.
+        Returns saved responses classified from immutable submission metadata. Supporting upload responses are included for the document creator or a workspace API key with submissions:download_files, and omitted for other clients. Uploaded values use the existing authenticated file-descriptor download flow.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

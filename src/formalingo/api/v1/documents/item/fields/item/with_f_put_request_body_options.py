@@ -7,11 +7,13 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class WithFPutRequestBody_options(AdditionalDataHolder, Parsable):
     """
-    Type-specific options. Calculation fields require formula and accept result_type ("text" or "number").
+    Type-specific options, including additional options supported by the field type. For calculation fields, use formula and result_type (text or number).
     """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
+    # Set true for a supporting upload request excluded from the document and signed PDF. Only file_upload supports this flag; false and changing the field purpose after creation are rejected.
+    supporting_attachment: Optional[bool] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> WithFPutRequestBody_options:
@@ -30,6 +32,7 @@ class WithFPutRequestBody_options(AdditionalDataHolder, Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "supporting_attachment": lambda n : setattr(self, 'supporting_attachment', n.get_bool_value()),
         }
         return fields
     
@@ -41,6 +44,7 @@ class WithFPutRequestBody_options(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_bool_value("supporting_attachment", self.supporting_attachment)
         writer.write_additional_data_value(self.additional_data)
     
 

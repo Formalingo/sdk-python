@@ -15,6 +15,8 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+    from .with_f400_error import WithF400Error
+    from .with_f403_error import WithF403Error
     from .with_f_delete_response import WithFDeleteResponse
     from .with_f_put_request_body import WithFPutRequestBody
     from .with_f_put_response import WithFPutResponse
@@ -34,7 +36,7 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[WithFDeleteResponse]:
         """
-        Delete a field
+        Deletes a field or supporting attachment request from the draft. Existing signing submissions keep their pinned requirements. API keys need documents:write; session/OAuth users must be the document creator for supporting requests.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[WithFDeleteResponse]
         """
@@ -42,8 +44,11 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
             request_configuration
         )
         from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+        from .with_f400_error import WithF400Error
+        from .with_f403_error import WithF403Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": WithF403Error,
             "409": DocumentNotEditableConflict,
         }
         if not self.request_adapter:
@@ -54,8 +59,8 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
     
     async def put(self,body: WithFPutRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[WithFPutResponse]:
         """
-        Update a field
-        param body: The request body
+        Partially updates a field. Supporting requests can change label, assigneeRole, isRequired and order; purpose, file_upload type, true supporting flag, writable state, null default and zero geometry cannot change. API keys need documents:write; session/OAuth users must be the document creator for supporting requests. Omitted properties are preserved.
+        param body: Partial field update. Supporting requests allow label, assigned signer, requiredness and order changes; their file_upload type, true supporting flag, writable state, null default and zero geometry must remain unchanged. Field purpose cannot be converted. Omitted properties are preserved.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[WithFPutResponse]
         """
@@ -65,8 +70,12 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .......models.document_not_editable_conflict import DocumentNotEditableConflict
+        from .with_f400_error import WithF400Error
+        from .with_f403_error import WithF403Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": WithF400Error,
+            "403": WithF403Error,
             "409": DocumentNotEditableConflict,
         }
         if not self.request_adapter:
@@ -77,7 +86,7 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Delete a field
+        Deletes a field or supporting attachment request from the draft. Existing signing submissions keep their pinned requirements. API keys need documents:write; session/OAuth users must be the document creator for supporting requests.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -88,8 +97,8 @@ class WithFItemRequestBuilder(BaseRequestBuilder):
     
     def to_put_request_information(self,body: WithFPutRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Update a field
-        param body: The request body
+        Partially updates a field. Supporting requests can change label, assigneeRole, isRequired and order; purpose, file_upload type, true supporting flag, writable state, null default and zero geometry cannot change. API keys need documents:write; session/OAuth users must be the document creator for supporting requests. Omitted properties are preserved.
+        param body: Partial field update. Supporting requests allow label, assigned signer, requiredness and order changes; their file_upload type, true supporting flag, writable state, null default and zero geometry must remain unchanged. Field purpose cannot be converted. Omitted properties are preserved.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

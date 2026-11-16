@@ -7,11 +7,13 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class DocumentField_options(AdditionalDataHolder, Parsable):
     """
-    Type-specific options. For calculation fields, use { formula: "{{Field A}} {{Field B}}", result_type: "text" | "number" }.
+    Type-specific options. A file_upload field with supporting_attachment: true is a supporting attachment request with zero geometry, excluded from the rendered document and signed PDF.
     """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
+    # Set true for a supporting upload request excluded from the document and signed PDF. Only file_upload supports this flag; false and changing the field purpose after creation are rejected.
+    supporting_attachment: Optional[bool] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> DocumentField_options:
@@ -30,6 +32,7 @@ class DocumentField_options(AdditionalDataHolder, Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "supporting_attachment": lambda n : setattr(self, 'supporting_attachment', n.get_bool_value()),
         }
         return fields
     
@@ -41,6 +44,7 @@ class DocumentField_options(AdditionalDataHolder, Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_bool_value("supporting_attachment", self.supporting_attachment)
         writer.write_additional_data_value(self.additional_data)
     
 

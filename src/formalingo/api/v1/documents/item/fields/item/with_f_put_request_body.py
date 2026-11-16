@@ -11,38 +11,39 @@ if TYPE_CHECKING:
 
 @dataclass
 class WithFPutRequestBody(AdditionalDataHolder, Parsable):
+    """
+    Partial field update. Supporting requests allow label, assigned signer, requiredness and order changes; their file_upload type, true supporting flag, writable state, null default and zero geometry must remain unchanged. Field purpose cannot be converted. Omitted properties are preserved.
+    """
     # Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.
     additional_data: dict[str, Any] = field(default_factory=dict)
 
-    from .with_f_put_request_body_direction import WithFPutRequestBody_direction
-
-    # The direction property
-    direction: Optional[WithFPutRequestBody_direction] = WithFPutRequestBody_direction("auto")
     # The assigneeRole property
     assignee_role: Optional[str] = None
     # The defaultValue property
     default_value: Optional[str] = None
-    # The height property
+    # The direction property
+    direction: Optional[WithFPutRequestBody_direction] = None
+    # Required and positive for placed fields. Omit or use 0 for a supporting attachment request.
     height: Optional[float] = None
-    # The isReadOnly property
+    # Supporting attachment requests must remain writable.
     is_read_only: Optional[bool] = None
-    # The isRequired property
+    # Defaults to true for supporting attachment requests and false for ordinary placed fields.
     is_required: Optional[bool] = None
     # The label property
     label: Optional[str] = None
-    # Type-specific options. Calculation fields require formula and accept result_type ("text" or "number").
+    # Type-specific options, including additional options supported by the field type. For calculation fields, use formula and result_type (text or number).
     options: Optional[WithFPutRequestBody_options] = None
-    # The order property
+    # Field order. For supporting attachment requests, the value must be between 0 and 1,000,000 inclusive.
     order: Optional[int] = None
-    # The pageNumber property
+    # Required and at least 1 for placed fields. Omit or use 0 for a supporting attachment request.
     page_number: Optional[int] = None
     # The type property
     type: Optional[WithFPutRequestBody_type] = None
-    # The width property
+    # Required and positive for placed fields. Omit or use 0 for a supporting attachment request.
     width: Optional[float] = None
-    # The x property
+    # Required for placed fields. Omit or use 0 for a supporting attachment request.
     x: Optional[float] = None
-    # The y property
+    # Required for placed fields. Omit or use 0 for a supporting attachment request.
     y: Optional[float] = None
     
     @staticmethod

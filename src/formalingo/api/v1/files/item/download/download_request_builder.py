@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from .file_download_response401_error import FileDownloadResponse401Error
     from .file_download_response403_error import FileDownloadResponse403Error
     from .file_download_response404_error import FileDownloadResponse404Error
+    from .file_download_response409_error import FileDownloadResponse409Error
 
 class DownloadRequestBuilder(BaseRequestBuilder):
     """
@@ -34,7 +35,7 @@ class DownloadRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[FileDownloadResponse]:
         """
-        Returns a short-lived signed URL for a response upload or signed PDF file. Permission is file-kind specific: response uploads require submissions:download_files; signed PDFs require submissions:download_pdf.
+        Returns JSON containing a short-lived signed URL, not the file bytes. Response uploads, including supporting files, require submissions:download_files; signed PDFs require submissions:download_pdf. Supporting uploads require the document creator for session/OAuth access; explicitly scoped workspace API keys are trusted integration credentials. Privacy is classified from immutable submission metadata, including verified legacy metadata.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[FileDownloadResponse]
         """
@@ -44,11 +45,13 @@ class DownloadRequestBuilder(BaseRequestBuilder):
         from .file_download_response401_error import FileDownloadResponse401Error
         from .file_download_response403_error import FileDownloadResponse403Error
         from .file_download_response404_error import FileDownloadResponse404Error
+        from .file_download_response409_error import FileDownloadResponse409Error
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "401": FileDownloadResponse401Error,
             "403": FileDownloadResponse403Error,
             "404": FileDownloadResponse404Error,
+            "409": FileDownloadResponse409Error,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -58,7 +61,7 @@ class DownloadRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns a short-lived signed URL for a response upload or signed PDF file. Permission is file-kind specific: response uploads require submissions:download_files; signed PDFs require submissions:download_pdf.
+        Returns JSON containing a short-lived signed URL, not the file bytes. Response uploads, including supporting files, require submissions:download_files; signed PDFs require submissions:download_pdf. Supporting uploads require the document creator for session/OAuth access; explicitly scoped workspace API keys are trusted integration credentials. Privacy is classified from immutable submission metadata, including verified legacy metadata.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

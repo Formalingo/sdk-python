@@ -36,11 +36,11 @@ class DocumentField(AdditionalDataHolder, Parsable):
     is_required: Optional[bool] = None
     # The label property
     label: Optional[str] = None
-    # Type-specific options. For calculation fields, use { formula: "{{Field A}} {{Field B}}", result_type: "text" | "number" }.
+    # Type-specific options. A file_upload field with supporting_attachment: true is a supporting attachment request with zero geometry, excluded from the rendered document and signed PDF.
     options: Optional[DocumentField_options] = None
     # The order property
     order: Optional[float] = None
-    # The pageNumber property
+    # PDF page number, starting at 1. Zero means no PDF-page placement, as used by generated block fields and supporting attachment requests.
     page_number: Optional[int] = None
     # The type property
     type: Optional[DocumentField_type] = None
